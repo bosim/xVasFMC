@@ -8,6 +8,17 @@ of this project are:
 * Assisting more than overtaking control.
 * Only be a FMS nothing else.
 
+Compiling
+=================
+* Tested with Microsoft Visual Studio C++ 2010 Express and Qt SDK 1.2.1. Can be done
+by simply open the project files in Qt Creator and building, first vaslib, then vasfmc
+and then xpfmccoonn21.
+
+License
+=================
+vasfmc is distributed under GNU GPL version 2. See LICENSE.txt for details. Few files are
+not GPL, however redistribution has been granted. Please take notice of that when/if editing. 
+
 Author(s)
 =================
 
