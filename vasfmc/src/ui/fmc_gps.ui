@@ -1,0 +1,82 @@
+<ui version="4.0" >
+ <author>Alex Wemmer &lt;alex@wemmer.at></author>
+ <class>FMCGPS</class>
+ <widget class="QWidget" name="FMCGPS" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>366</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>500</width>
+    <height>366</height>
+   </size>
+  </property>
+  <property name="maximumSize" >
+   <size>
+    <width>500</width>
+    <height>366</height>
+   </size>
+  </property>
+  <property name="font" >
+   <font>
+    <family>Verdana</family>
+    <pointsize>8</pointsize>
+    <weight>50</weight>
+    <italic>false</italic>
+    <bold>false</bold>
+    <underline>false</underline>
+    <strikeout>false</strikeout>
+   </font>
+  </property>
+  <property name="windowTitle" >
+   <string>vasFMC FCU Style A</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset>
+    <normaloff>../../graphics/icon/icon_fmc_32.png</normaloff>../../graphics/icon/icon_fmc_32.png</iconset>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" >
+   <item row="0" column="0" >
+    <widget class="QFrame" name="display" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize" >
+      <size>
+       <width>854</width>
+       <height>179</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>854</width>
+       <height>179</height>
+      </size>
+     </property>
+     <property name="frameShape" >
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Plain</enum>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,1 @@
+Place XPLM.lib and XPWidgets.lib here

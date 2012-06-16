@@ -1,0 +1,85 @@
+<ui version="4.0" >
+ <author>Alex Wemmer &lt;alex@wemmer.at></author>
+ <class>FMCFCU</class>
+ <widget class="QWidget" name="FMCFCU" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>998</width>
+    <height>166</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>998</width>
+    <height>166</height>
+   </size>
+  </property>
+  <property name="maximumSize" >
+   <size>
+    <width>998</width>
+    <height>166</height>
+   </size>
+  </property>
+  <property name="font" >
+   <font>
+    <family>Verdana</family>
+    <pointsize>8</pointsize>
+    <weight>50</weight>
+    <italic>false</italic>
+    <bold>false</bold>
+    <underline>false</underline>
+    <strikeout>false</strikeout>
+   </font>
+  </property>
+  <property name="windowTitle" >
+   <string>vasFMC FCU Style A</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset>../../graphics/icon/icon_fmc_32.png</iconset>
+  </property>
+  <widget class="QFrame" name="display" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>854</width>
+     <height>179</height>
+    </rect>
+   </property>
+   <property name="sizePolicy" >
+    <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize" >
+    <size>
+     <width>854</width>
+     <height>179</height>
+    </size>
+   </property>
+   <property name="maximumSize" >
+    <size>
+     <width>854</width>
+     <height>179</height>
+    </size>
+   </property>
+   <property name="frameShape" >
+    <enum>QFrame::NoFrame</enum>
+   </property>
+   <property name="frameShadow" >
+    <enum>QFrame::Plain</enum>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

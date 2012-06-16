@@ -1,0 +1,178 @@
+<ui version="4.0" >
+ <class>FMCConsole</class>
+ <widget class="QMainWindow" name="FMCConsole" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>784</width>
+    <height>268</height>
+   </rect>
+  </property>
+  <property name="contextMenuPolicy" >
+   <enum>Qt::NoContextMenu</enum>
+  </property>
+  <property name="windowTitle" >
+   <string>vasFMC Console</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset>
+    <normaloff>../../graphics/icon/icon_fmc_32.png</normaloff>../../graphics/icon/icon_fmc_32.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <layout class="QGridLayout" name="gridLayout" >
+    <item row="0" column="0" >
+     <layout class="QHBoxLayout" name="horizontalLayout" >
+      <item>
+       <widget class="QPushButton" name="cdu_left_btn" >
+        <property name="text" >
+         <string>CDU left</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pfd_left_btn" >
+        <property name="text" >
+         <string>PFD left</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="nd_left_btn" >
+        <property name="text" >
+         <string>ND left</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="upper_ecam_btn" >
+        <property name="text" >
+         <string>&amp;Upper ECAM</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="nd_right_btn" >
+        <property name="text" >
+         <string>ND right</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pfd_right_btn" >
+        <property name="text" >
+         <string>PFD right</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cdu_right_btn" >
+        <property name="text" >
+         <string>CDU right</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="fcu_btn" >
+        <property name="text" >
+         <string>FCU</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="gps_btn" >
+        <property name="text" >
+         <string>GPS</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="0" >
+     <widget class="QTabWidget" name="overall_tab" >
+      <property name="currentIndex" >
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab_2" >
+       <attribute name="title" >
+        <string>Logging</string>
+       </attribute>
+       <layout class="QHBoxLayout" >
+        <item>
+         <widget class="QTextBrowser" name="logtext" >
+          <property name="font" >
+           <font>
+            <family>Courier New</family>
+           </font>
+          </property>
+          <property name="frameShape" >
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow" >
+           <enum>QFrame::Sunken</enum>
+          </property>
+          <property name="lineWrapMode" >
+           <enum>QTextEdit::WidgetWidth</enum>
+          </property>
+          <property name="acceptRichText" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_3" >
+       <attribute name="title" >
+        <string>Config Debug</string>
+       </attribute>
+       <layout class="QHBoxLayout" >
+        <item>
+         <widget class="QTabWidget" name="config_tab" >
+          <property name="enabled" >
+           <bool>true</bool>
+          </property>
+          <property name="currentIndex" >
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="tab" >
+           <attribute name="title" >
+            <string/>
+           </attribute>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>784</width>
+     <height>19</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar" />
+ </widget>
+ <tabstops>
+  <tabstop>cdu_left_btn</tabstop>
+  <tabstop>pfd_left_btn</tabstop>
+  <tabstop>nd_left_btn</tabstop>
+  <tabstop>upper_ecam_btn</tabstop>
+  <tabstop>nd_right_btn</tabstop>
+  <tabstop>pfd_right_btn</tabstop>
+  <tabstop>cdu_right_btn</tabstop>
+  <tabstop>fcu_btn</tabstop>
+  <tabstop>gps_btn</tabstop>
+  <tabstop>overall_tab</tabstop>
+  <tabstop>logtext</tabstop>
+  <tabstop>config_tab</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
