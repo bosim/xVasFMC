@@ -27,23 +27,12 @@ RC_FILE = vaslib.rc
 # General win32 settings, use msfs and fsuipc includes
 win32 {
 
-LIBS += -L../lib
-LIBS += -lFSUIPC_User
-
 HEADERS += \
     code_timer.h
 
 SOURCES += \
     code_timer.cpp
 
-    # Special settings for gauge
-    gauge {
-        DEFINES += VASFMC_GAUGE=1
-        CONFIG += thread
-        TARGET = vaslibgau  # rename the target for gauge
-        LIBS += -lModuleUser
-        LIBS -= -lFSUIPC_User
-    }
 }
 
 

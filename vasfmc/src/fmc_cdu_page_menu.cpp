@@ -1562,7 +1562,6 @@ void FMCCDUPageStyleAMenu::processAction(const QString& action)
         switch(llsk_index)
         {
             case(1): fmcControl().setGLFontSize(fmcControl().glFontIndex()-1); break;
-            case(2): fmcControl().decFCUFontSize(); break;
             case(3): fmcControl().decCDUFontSize(); break;
 
             case(4): {
@@ -1605,7 +1604,6 @@ void FMCCDUPageStyleAMenu::processAction(const QString& action)
         switch(rlsk_index)
         {
             case(1): fmcControl().setGLFontSize(fmcControl().glFontIndex()+1); break;
-            case(2): fmcControl().incFCUFontSize(); break;
             case(3): fmcControl().incCDUFontSize(); break;
             case(4): fmcControl().setShowFps(!fmcControl().showFps()); break;
         }

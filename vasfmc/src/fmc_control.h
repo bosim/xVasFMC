@@ -40,6 +40,8 @@
 #include "fmc_data.h"
 #include "fmc_processor.h"
 
+#include "info_server.h"
+
 class Config;
 class FMCData;
 class FMCAutopilot;
@@ -50,12 +52,7 @@ class ConfigWidgetProvider;
 class OpenGLText;
 class FlightStatusCheckerBase;
 class AircraftData;
-class FMCGPSHandler;
-class FMCFCUHandler;
 class FMCCDUHandler;
-class FMCPFDHandler;
-class FMCNavdisplayHandler;
-class FMCECAMHandler;
 class CPFlightSerial;
 class IOCPServer;
 class FMCSoundsHandler;
@@ -111,38 +108,10 @@ public:
     int glFontSize() const;
     int glFontIndex() const;
 
-    //----- PFD
-
-    void setPFDLeftHandler(FMCPFDHandler* pfd_left_handler) { m_pfd_left_handler = pfd_left_handler; }
-    void setPFDRightHandler(FMCPFDHandler* pfd_right_handler) { m_pfd_right_handler = pfd_right_handler; }
-
-    //----- ND
-
-    void setNDLeftHandler(FMCNavdisplayHandler* nd_left_handler) { m_nd_left_handler = nd_left_handler; }
-    void setNDRightHandler(FMCNavdisplayHandler* nd_right_handler) { m_nd_right_handler = nd_right_handler; }
-
-    //----- ECAM
-
-    void setUpperEcamHandler(FMCECAMHandler* upper_ecam_handler) { m_upper_ecam_handler = upper_ecam_handler; }
-
-    //----- FCU
-
-    void setFCUHandler(FMCFCUHandler* fcu_handler) { m_fcu_handler = fcu_handler; }
-    void incFCUFontSize();
-    void decFCUFontSize();
-
-    //----- CDU
-
     void setCDULeftHandler(FMCCDUHandler* cdu_left_handler) { m_cdu_left_handler = cdu_left_handler; }
     void setCDURightHandler(FMCCDUHandler* cdu_right_handler) { m_cdu_right_handler = cdu_right_handler; }
     void incCDUFontSize();
     void decCDUFontSize();
-
-    //----- GPS
-
-    void setGPSHandler(FMCGPSHandler* gps_handler) { m_gps_handler = gps_handler; }
-    void incGPSFontSize();
-    void decGPSFontSize();
 
     //----- SOUND
 
@@ -757,15 +726,8 @@ protected:
 
     ChecklistManager *m_checklist_manager;
 
-    FMCPFDHandler* m_pfd_left_handler;
-    FMCPFDHandler* m_pfd_right_handler;
-    FMCNavdisplayHandler* m_nd_left_handler;
-    FMCNavdisplayHandler* m_nd_right_handler;
-    FMCGPSHandler* m_gps_handler;
-    FMCFCUHandler* m_fcu_handler;
     FMCCDUHandler* m_cdu_left_handler;
     FMCCDUHandler* m_cdu_right_handler;
-    FMCECAMHandler* m_upper_ecam_handler;
 
     //----- pushback
 
@@ -783,6 +745,7 @@ protected:
 
     CPFlightSerial* m_cpflight_serial;
     IOCPServer* m_iocp_server;
+    InfoServer* m_info_server;
 
     //-----
 

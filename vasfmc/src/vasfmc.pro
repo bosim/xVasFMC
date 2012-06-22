@@ -43,30 +43,14 @@ LIBS += -L../../vaslib/lib
 
 # General win32 settings, use msfs and fsuipc includes
 win32 {
-    DEFINES += HAVE_FSUIPC
 
-    # Special settings for gauge
-    gauge {
-        # The gauge is built as library instead of application
-        TEMPLATE = lib
-        CONFIG += shared
-        TARGET = vasfmcgau
-
-        PRE_TARGETDEPS += ../../vaslib/lib/libvaslibgau.a
-        DEFINES += VASFMC_GAUGE=1 WINVER=0x500
-        LIBS += -lvaslibgau -lModuleUser -lpsapi
-
-        QMAKE_RC = windres -D VASFMC_GAUGE=1
-    }
-
-    else {
         QMAKE_LINK += /NODEFAULTLIB:libc
         PRE_TARGETDEPS += ../../vaslib/lib/vaslib.lib
         DEFINES += VASFMC_GAUGE=0
-        LIBS += vaslib.lib FSUIPC_User.lib wsock32.lib
-        #LIBS += -lvaslib -lFSUIPC_User -lws2_32
+        LIBS += vaslib.lib wsock32.lib
+        LIBS += -lvaslib -lws2_32
         #QMAKE_RC = windres -D VASFMC_GAUGE=0
-    }
+
 }
 
 else {
@@ -168,13 +152,6 @@ else {
 }
 
 
-################## Flightgear ###########
-withfgfs {
-    DEFINES += HAVE_PLIB
-    LIBS += -lplibnet -lplibul
-}
-
-
 ################## qextserialport ###########
 serial {
     DEFINES += SERIAL
@@ -204,12 +181,6 @@ HEADERS	+= \
     fmc_autothrottle.h \
     fmc_autothrottle_defines.h \
     fmc_processor.h \
-    fmc_navdisplay_defines.h \
-    fmc_navdisplay.h \
-    fmc_navdisplay_glwidget.h \
-    fmc_navdisplay_style.h \
-    fmc_navdisplay_style_a.h \
-    fmc_navdisplay_style_b.h \
     gldraw.h \
     opengltext.h \
     lfontrenderer.h \
@@ -224,16 +195,6 @@ HEADERS	+= \
     fmc_cdu_page_atc.h \
     fmc_console_defines.h \
     fmc_console.h \
-    fmc_pfd_defines.h \
-    fmc_pfd.h \
-    fmc_pfd_glwidget_base.h \
-    fmc_pfd_glwidget_style_a.h \
-    fmc_pfd_glwidget_style_b.h \
-    fmc_ecam_defines.h \
-    fmc_ecam.h \
-    fmc_ecam_glwidget_base.h \
-    fmc_ecam_glwidget_style_a.h \
-    fmc_ecam_glwidget_style_b.h \
     fmc_sounds_defines.h \
     fmc_sounds.h \
     fmc_sounds_style_a.h \
@@ -241,25 +202,18 @@ HEADERS	+= \
     fmc_sounds_handler.h \
     vas_widget.h \
     vas_gl_widget.h \
-    fmc_fcu.h \
-    fmc_fcu_defines.h \
-    fmc_fcu_style_a.h \
     mmx.h \
     fmc_flightstatus_checker_base.h \
     fmc_flightstatus_checker_style_a.h \
     cpflight_serial.h \
     iocp.h \
-    fmc_gps.h \
-    fmc_gps_defines.h \
-    fmc_gps_style_g.h \
     checklist.h \
     lfontrenderer.h \
-    fs9gauges.h
+    info_server.h
 
 # Extra headers for the gauge
 win32:gauge {
-    HEADERS	+= \
-        fs9gauges.h
+    HEADERS	+=
 }
 
 SOURCES	+= \
@@ -268,11 +222,6 @@ SOURCES	+= \
     fmc_autopilot.cpp \
     fmc_autothrottle.cpp \
     fmc_processor.cpp \
-    fmc_navdisplay.cpp \
-    fmc_navdisplay_glwidget.cpp \
-    fmc_navdisplay_style.cpp \
-    fmc_navdisplay_style_a.cpp \
-    fmc_navdisplay_style_b.cpp \
     gldraw.cpp \
     opengltext.cpp \
     lfontrenderer.cpp \
@@ -285,29 +234,17 @@ SOURCES	+= \
     fmc_cdu_page_perf.cpp \
     fmc_cdu_page_atc.cpp \
     fmc_console.cpp \
-    fmc_pfd.cpp \
-    fmc_pfd_glwidget_base.cpp \
-    fmc_pfd_glwidget_style_a.cpp \
-    fmc_pfd_glwidget_style_b.cpp \
-    fmc_ecam.cpp \
-    fmc_ecam_glwidget_base.cpp \
-    fmc_ecam_glwidget_style_a.cpp \
-    fmc_ecam_glwidget_style_b.cpp \
     fmc_sounds.cpp \
     fmc_sounds_style_a.cpp \
     fmc_sounds_style_b.cpp \
     fmc_sounds_handler.cpp \
     vas_widget.cpp \
     vas_gl_widget.cpp \
-    fmc_fcu.cpp \
-    fmc_fcu_style_a.cpp \
     mmx.cpp \
     fmc_flightstatus_checker_base.cpp \
     fmc_flightstatus_checker_style_a.cpp \
     cpflight_serial.cpp \
     iocp.cpp \
-    fmc_gps.cpp \
-    fmc_gps_style_g.cpp \
     main.cpp \
     checklist.cpp \
     lfontrenderer.cpp
@@ -336,10 +273,5 @@ else {
 }
 
 FORMS += \
-    ui/fmc_navdisplay.ui \
-    ui/fmc_pfd.ui \
-    ui/fmc_ecam.ui \
     ui/fmc_cdu.ui \
-    ui/fmc_console.ui \
-    ui/fmc_fcu.ui \
-    ui/fmc_gps.ui
+    ui/fmc_console.ui

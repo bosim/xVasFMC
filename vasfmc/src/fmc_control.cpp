@@ -46,22 +46,19 @@
 #include "fmc_sounds_handler.h"
 #include "fmc_autopilot.h"
 #include "fmc_autothrottle.h"
-#include "fmc_gps.h"
-#include "fmc_fcu.h"
 #include "fmc_cdu.h"
-#include "fmc_pfd.h"
-#include "fmc_navdisplay.h"
-#include "fmc_ecam.h"
 
 #include "fmc_flightstatus_checker_style_a.h"
 
 #include "cpflight_serial.h"
 #include "iocp.h"
+#include "info_server.h"
 
 #include "transport_layer_tcpclient.h"
 #include "transport_layer_tcpserver.h"
 
 #include "fmc_control.h"
+
 
 const static QString DCT_WPT_TEXT = "DCT";
 const static QString OVERFLY_WPT_DESIGNATOR = "*";
@@ -80,8 +77,8 @@ FMCControl::FMCControl(ConfigWidgetProvider* config_widget_provider,
     m_fs_access(0), m_flight_status_checker(0), m_last_flight_status_checker_style(-1),
     m_navdata(0), m_pbd_counter(0), m_declination_calc(cfg->getValue(CFG_DECLINATION_DATAFILE)),
     m_aircraft_data(new AircraftData(m_flightstatus)), m_aircraft_data_confirmed(false),
-    m_checklist_manager(0), m_pfd_left_handler(0), m_pfd_right_handler(0), m_nd_left_handler(0), m_nd_right_handler(0), 
-    m_gps_handler(0), m_fcu_handler(0), m_cdu_left_handler(0), m_cdu_right_handler(0), m_upper_ecam_handler(0),
+    m_checklist_manager(0),
+    m_cdu_left_handler(0), m_cdu_right_handler(0),
     m_pushback_start_heading(-1), m_pushback_dist_before_turn_m(0), m_pushback_turn_direction_clockwise(false),
     m_pushback_turn_degrees(0), m_pushback_dist_after_turn_m(0), m_cpflight_serial(0), m_iocp_server(0),
     m_is_irs_aligned(false), m_missed_approach_visible_on_cdu_left(false), m_missed_approach_visible_on_cdu_right(false),
@@ -249,6 +246,8 @@ FMCControl::FMCControl(ConfigWidgetProvider* config_widget_provider,
         m_iocp_server = new IOCPServer(CFG_IOCP_FILENAME, this);
         MYASSERT(m_iocp_server != 0);
     }
+
+    m_info_server = new InfoServer();
 
     // init noise
 
@@ -572,35 +571,11 @@ void FMCControl::slotCentralTimer()
     {
         switch(m_fsctrl_poll_index)
         {
-            case(0): {
-                if (m_pfd_left_handler != 0 && m_pfd_left_handler->fmcPFD() != 0) 
-                    m_pfd_left_handler->fmcPFD()->processFSControls();
-                if (m_pfd_right_handler != 0 && m_pfd_right_handler->fmcPFD() != 0) 
-                    m_pfd_right_handler->fmcPFD()->processFSControls();
-                break;
-            }
-            case(1): {
-                if (m_nd_left_handler != 0 && m_nd_left_handler->fmcNavdisplay() != 0) 
-                    m_nd_left_handler->fmcNavdisplay()->processFSControls();
-                if (m_nd_right_handler != 0 && m_nd_right_handler->fmcNavdisplay() != 0) 
-                    m_nd_right_handler->fmcNavdisplay()->processFSControls();
-                break;
-            }
-            case(2): {
-                if (m_upper_ecam_handler != 0 && m_upper_ecam_handler->fmcECAM() != 0)
-                    m_upper_ecam_handler->fmcECAM()->processFSControls();
-                break;
-            }
             case(3): {
                 if (m_cdu_left_handler != 0 && m_cdu_left_handler->fmcCduBase() != 0) 
                     m_cdu_left_handler->fmcCduBase()->slotProcessInput();
                 if (m_cdu_right_handler != 0 && m_cdu_right_handler->fmcCduBase() != 0) 
                     m_cdu_right_handler->fmcCduBase()->slotProcessInput();
-                break;
-            }
-            case(4): {
-                if (m_fcu_handler->fmcFcuBase() != 0) 
-                    m_fcu_handler->fmcFcuBase()->slotProcessInput();
                 break;
             }
         }
@@ -620,11 +595,6 @@ void FMCControl::slotCentralTimer()
                     m_cdu_left_handler->fmcCduBase()->slotRefresh();
                 if (m_cdu_right_handler != 0 && m_cdu_right_handler->fmcCduBase() != 0) 
                     m_cdu_right_handler->fmcCduBase()->slotRefresh();
-                break;
-            }
-            case(1): {
-                if (m_fcu_handler->fmcFcuBase() != 0) 
-                    m_fcu_handler->fmcFcuBase()->slotRefresh();
                 break;
             }
         }
@@ -651,41 +621,6 @@ void FMCControl::slotCentralTimer()
 
         m_ap_athr_refresh_index = 1 - m_ap_athr_refresh_index;
         m_ap_athr_refresh_timer.start();
-    }
-
-    //----- either draw the PFD, ND 
-
-    if (m_pfdnd_refresh_timer.elapsed() >= m_pfdnd_refresh_ms)
-    {
-        switch(m_pfdnd_refresh_index)
-        {
-            case(0): {
-                if (m_pfd_left_handler != 0 && m_pfd_left_handler->fmcPFD() != 0) 
-                    m_pfd_left_handler->fmcPFD()->slotRefresh();
-                if (m_pfd_right_handler != 0 &&m_pfd_right_handler->fmcPFD() != 0) 
-                    m_pfd_right_handler->fmcPFD()->slotRefresh();
-                break;
-            }
-            case(1): {
-                if (m_nd_left_handler != 0 && m_nd_left_handler->fmcNavdisplay() != 0)
-                    m_nd_left_handler->fmcNavdisplay()->slotRefresh();
-                if (m_nd_right_handler != 0 && m_nd_right_handler->fmcNavdisplay() != 0) 
-                    m_nd_right_handler->fmcNavdisplay()->slotRefresh();
-                break;
-            }
-        }
-
-        m_pfdnd_refresh_index = 1 - m_pfdnd_refresh_index;
-        m_pfdnd_refresh_timer.start();
-    }
-
-    //----- either draw the UPPER or LOWER ECAM
-
-    if (m_ecam_refresh_timer.elapsed() >= m_ecam_refresh_ms)
-    {
-        if (m_upper_ecam_handler != 0 && m_upper_ecam_handler->fmcECAM() != 0) m_upper_ecam_handler->fmcECAM()->slotRefresh();
-        
-        m_ecam_refresh_timer.start();
     }
     
     if (overall_timer.elapsed() > 100) 
@@ -1576,37 +1511,6 @@ int FMCControl::glFontIndex() const
     return m_main_config->getIntValue(CFG_ACTIVE_FONT_INDEX);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-
-void FMCControl::incGPSFontSize()
-{
-    if (m_gps_handler == 0) return;
-    if (m_gps_handler->fmcGpsBase() != 0) m_gps_handler->fmcGpsBase()->incFontSize();
-}
-
-/////////////////////////////////////////////////////////////////////////////
-
-void FMCControl::decGPSFontSize()
-{
-    if (m_gps_handler == 0) return;
-    if (m_gps_handler->fmcGpsBase() != 0) m_gps_handler->fmcGpsBase()->decFontSize();
-}
-
-/////////////////////////////////////////////////////////////////////////////
-
-void FMCControl::incFCUFontSize()
-{
-    if (m_fcu_handler == 0) return;
-    if (m_fcu_handler->fmcFcuBase() != 0) m_fcu_handler->fmcFcuBase()->incFontSize();
-}
-
-/////////////////////////////////////////////////////////////////////////////
-
-void FMCControl::decFCUFontSize()
-{
-    if (m_fcu_handler == 0) return;
-    if (m_fcu_handler->fmcFcuBase() != 0) m_fcu_handler->fmcFcuBase()->decFontSize();
-}
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -1694,8 +1598,6 @@ void FMCControl::setCduScrollModeInverse()
 
 bool FMCControl::ndNormalScrollMode() const
 {
-    if (m_nd_left_handler != 0 && m_nd_left_handler->fmcNavdisplay() != 0) 
-        return m_nd_left_handler->fmcNavdisplay()->normalScrollMode();
     return true;
 }
 
@@ -1703,45 +1605,25 @@ bool FMCControl::ndNormalScrollMode() const
 
 void FMCControl::setNdScrollModeNormal()
 {
-    if (m_nd_left_handler != 0  && 
-        m_nd_left_handler->fmcNavdisplay() != 0 && 
-        !m_nd_left_handler->fmcNavdisplay()->normalScrollMode()) m_nd_left_handler->fmcNavdisplay()->toggleScrollMode();
-
-    if (m_nd_right_handler != 0  && 
-        m_nd_right_handler->fmcNavdisplay() != 0 && 
-        !m_nd_right_handler->fmcNavdisplay()->normalScrollMode()) m_nd_right_handler->fmcNavdisplay()->toggleScrollMode();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
 void FMCControl::setNdScrollModeInverse()
 {
-    if (m_nd_left_handler != 0  && 
-        m_nd_left_handler->fmcNavdisplay() != 0 && 
-        !m_nd_left_handler->fmcNavdisplay()->inverseScrollMode()) m_nd_left_handler->fmcNavdisplay()->toggleScrollMode();
-
-    if (m_nd_right_handler != 0  && 
-        m_nd_right_handler->fmcNavdisplay() != 0 && 
-        !m_nd_right_handler->fmcNavdisplay()->inverseScrollMode()) m_nd_right_handler->fmcNavdisplay()->toggleScrollMode();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
 bool FMCControl::ndWindCorrection() const
 {
-    if (m_nd_left_handler != 0  && m_nd_left_handler->fmcNavdisplay() != 0)
-        return m_nd_left_handler->fmcNavdisplay()->doWindCorrection();
-    return false;
+    return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
 void FMCControl::toggleNdWindCorrection()
 {
-    if (m_nd_left_handler != 0  && m_nd_left_handler->fmcNavdisplay() != 0)
-        m_nd_left_handler->fmcNavdisplay()->toggleWindCorrection();
-    if (m_nd_right_handler != 0  && m_nd_right_handler->fmcNavdisplay() != 0)
-        m_nd_right_handler->fmcNavdisplay()->toggleWindCorrection();
 }
 
 /////////////////////////////////////////////////////////////////////////////

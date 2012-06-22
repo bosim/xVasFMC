@@ -32,12 +32,7 @@
 #include "infodlgimpl.h"
 
 #include "defines.h"
-#include "fmc_navdisplay.h"
-#include "fmc_pfd.h"
 #include "fmc_cdu.h"
-#include "fmc_ecam.h"
-#include "fmc_fcu.h"
-#include "fmc_gps.h"
 #include "fmc_sounds_handler.h"
 #include "fmc_control.h"
 #include "opengltext.h"
@@ -118,7 +113,6 @@ FMCConsole::FMCConsole(QWidget* parent, Qt::WFlags fl, const QString& style) :
         else              slotStyleA();
     }
 
-#if !VASFMC_GAUGE
     // setup console
     setWindowTitle(QString("vasFMC ")+VERSION+" - (c) "+COPYRIGHT);
     setStatusBar(0);
@@ -151,7 +145,6 @@ FMCConsole::FMCConsole(QWidget* parent, Qt::WFlags fl, const QString& style) :
     }
 
     registerConfigWidget("Main", m_main_config);
-#endif
 
     // setup FMC control
     m_fmc_control = new FMCControl(this, m_main_config, CFG_CONTROL_FILENAME);
@@ -168,57 +161,16 @@ FMCConsole::FMCConsole(QWidget* parent, Qt::WFlags fl, const QString& style) :
     m_fmc_sounds_handler = new FMCSoundsHandler(m_main_config, m_fmc_control);
     MYASSERT(m_fmc_sounds_handler != 0);
 
-    // setup FMC GPS
-    m_gps_handler = new FMCGPSHandler(this, m_main_config, CFG_GPS_FILENAME, m_fmc_control);
-    MYASSERT(m_gps_handler != 0);
-
-    // setup FMC FCU
-    m_fcu_handler = new FMCFCUHandler(this, m_main_config, CFG_FCU_FILENAME, m_fmc_control);
-    MYASSERT(m_fcu_handler != 0);
-
     // setup left FMC CDU
     m_cdu_left_handler = new FMCCDUHandler(this, m_main_config, CFG_CDU_LEFT_FILENAME, m_fmc_control, true);
     MYASSERT(m_cdu_left_handler != 0);
 
-    // setup left NAV display
-    m_navdisplay_left_handler = new FMCNavdisplayHandler(
-        this, m_main_config, CFG_NAVDISPLAY_LEFT_FILENAME, CFG_TCAS_FILENAME, m_fmc_control, true);
-    MYASSERT(m_navdisplay_left_handler != 0);
-
-    // setup left PFD display
-    m_pfd_left_handler = new FMCPFDHandler(
-        this, m_main_config, CFG_PFD_LEFT_FILENAME, m_fmc_control, true);
-    MYASSERT(m_pfd_left_handler != 0);
-
-#if !VASFMC_GAUGE
-    // setup right NAV display
-    m_navdisplay_right_handler = new FMCNavdisplayHandler(
-        this, m_main_config, CFG_NAVDISPLAY_RIGHT_FILENAME, CFG_TCAS_FILENAME, m_fmc_control, false);
-    MYASSERT(m_navdisplay_right_handler != 0);
-
-    // setup right PFD display
-    m_pfd_right_handler = new FMCPFDHandler(
-        this, m_main_config, CFG_PFD_RIGHT_FILENAME, m_fmc_control, false);
-    MYASSERT(m_pfd_right_handler != 0);
-
     // setup right FMC CDU
     m_cdu_right_handler = new FMCCDUHandler(this, m_main_config, CFG_CDU_RIGHT_FILENAME, m_fmc_control, false);
     MYASSERT(m_cdu_right_handler != 0);
-#endif
-
-    // setup upper ECAM display
-    m_upper_ecam_handler = new FMCECAMHandler(
-        true, this, m_main_config, CFG_UPPER_ECAM_FILENAME, m_fmc_control);
-    MYASSERT(m_upper_ecam_handler != 0);
 
     // create menus
     createMenus();
-
-#if !VASFMC_GAUGE
-    // setup splash timer
-    if (m_splash != 0) QTimer::singleShot(SPLASH_SHOW_TIME_MS, this, SLOT(slotDeleteSplashscreen()));
-#endif
-
 
     // connect profiling stuff
 
@@ -274,15 +226,7 @@ FMCConsole::~FMCConsole()
 void FMCConsole::restartGLDisplays()
 {
     Logger::log("FMCConsole:restartGLDisplays");
-    m_upper_ecam_handler->slotRestartECAM();
     //TODOm_lower_ecam_handler->restartECAM();
-    m_navdisplay_left_handler->slotRestartNavdisplay();
-    m_pfd_left_handler->slotRestartPFD();
-    m_gps_handler->restartGPS();
-#if !VASFMC_GAUGE    
-    m_navdisplay_right_handler->slotRestartNavdisplay();
-    m_pfd_right_handler->slotRestartPFD();
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -305,17 +249,9 @@ void FMCConsole::slotRestartFMC()
 #endif
 
     Logger::log("FMCConsole:restartFMC");
-    m_upper_ecam_handler->slotRestartECAM();
-    //TODOm_lower_ecam_handler->restartECAM();
-    m_navdisplay_left_handler->slotRestartNavdisplay();
-    m_pfd_left_handler->slotRestartPFD();
     m_fmc_sounds_handler->restartSounds();
-    m_fcu_handler->slotRestartFCU();
     m_cdu_left_handler->slotRestartCdu();
-    m_gps_handler->restartGPS();
 #if !VASFMC_GAUGE    
-    m_navdisplay_right_handler->slotRestartNavdisplay();
-    m_pfd_right_handler->slotRestartPFD();
     m_cdu_right_handler->slotRestartCdu();
 #endif
     m_fmc_control->setupFlightStatusChecker();
@@ -550,16 +486,8 @@ void FMCConsole::closeEvent(QCloseEvent* event )
 
     if (quit)
     {
-        m_gps_handler->close();
-        m_fcu_handler->close();
         m_cdu_left_handler->close();
         m_cdu_right_handler->close();
-        m_navdisplay_left_handler->close();
-        m_pfd_left_handler->close();
-        m_upper_ecam_handler->close();
-        //TODOm_lower_ecam_handler->close();
-        m_navdisplay_right_handler->close();
-        m_pfd_right_handler->close();
     }
 
 #endif
@@ -651,14 +579,12 @@ void FMCConsole::saveWindowGeometry()
 
 void FMCConsole::slotNDLeftButton()
 {
-    m_navdisplay_left_handler->isVisible() ? m_navdisplay_left_handler->hide() : m_navdisplay_left_handler->show();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
 void FMCConsole::slotPFDLeftButton()
 {
-    m_pfd_left_handler->isVisible() ? m_pfd_left_handler->hide() : m_pfd_left_handler->show();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -666,14 +592,12 @@ void FMCConsole::slotPFDLeftButton()
 #if !VASFMC_GAUGE
 void FMCConsole::slotNDRightButton()
 {
-    m_navdisplay_right_handler->isVisible() ? m_navdisplay_right_handler->hide() : m_navdisplay_right_handler->show();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
 void FMCConsole::slotPFDRightButton()
 {
-    m_pfd_right_handler->isVisible() ? m_pfd_right_handler->hide() : m_pfd_right_handler->show();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -695,21 +619,18 @@ void FMCConsole::slotCDULeftButton()
 
 void FMCConsole::slotFCUButton()
 {
-    m_fcu_handler->isVisible() ? m_fcu_handler->hide() : m_fcu_handler->show();    
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
 void FMCConsole::slotGPSButton()
 {
-    m_gps_handler->isVisible() ? m_gps_handler->hide() : m_gps_handler->show();    
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
 void FMCConsole::slotUpperECAMButton()
 {
-    m_upper_ecam_handler->isVisible() ? m_upper_ecam_handler->hide() : m_upper_ecam_handler->show();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -762,7 +683,6 @@ void FMCConsole::slotStyleG()
 void FMCConsole::slotFcuLeftOnlyModeChanged()
 {
     Logger::log("FMCConsole:slotFcuLeftOnlyModeChanged");
-    m_fcu_handler->slotRestartFCU();
 }
 
 /////////////////////////////////////////////////////////////////////////////
