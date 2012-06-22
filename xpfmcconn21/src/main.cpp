@@ -66,27 +66,16 @@ static float prepareSendQueueCallback (float, float, int, void*)
     // if plugin is disabled, do nothing and try again in 1 seconds
     if (!m_enabled) return 1;
 
-    m_logfile << "prepareSendQueueCallback called" << std::endl;
     double secs = XPLMGetElapsedTime();
-    m_logfile << "XPLMGetElapsedTime: " << secs << std::endl;
-
     int ticks = XPLMGetCycleNumber();
-    m_logfile << "XPLMGetCycleNumber: " << ticks << std::endl;
 
     doubleData.updateAll();
-    m_logfile << "doubleData.updateAll" << std::endl;
     floatData.updateAll();
-    m_logfile << "floatData.updateAll" << std::endl;
     boolData.updateAll();
-    m_logfile << "boolData.updateAll" << std::endl;
     intData.updateAll();
-    m_logfile << "intData.updateAll" << std::endl;
-    /*floatvectorData.updateAll();
-    m_logfile << "floatVectorData.updateAll" << std::endl;*/
+    floatvectorData.updateAll();
     stringData.updateAll();
-    m_logfile << "stringData.updateAll" << std::endl;
 
-    m_logfile << "myCommunicator->processOutput" << std::endl;
     myCommunicator->processOutput(intData, floatData, doubleData, boolData, floatvectorData,
                                   intvectorData, stringData, Handlers, ticks, secs, maxDataItems);
 
@@ -96,7 +85,6 @@ static float prepareSendQueueCallback (float, float, int, void*)
 
 static float sendQueuedDataCallback (float, float, int, void*)
 {
-    m_logfile << "sendQueuedDataCallback called" << std::endl;
     myCommunicator->flush(maxDataItems);
     return 0.08f;
 }
@@ -104,7 +92,6 @@ static float sendQueuedDataCallback (float, float, int, void*)
 float readDataCallback(float, float, int, void*)
 {
     if (!m_enabled) return 1;
-    m_logfile << "readDataCallback called" << std::endl;
 
     double secs = XPLMGetElapsedTime();
     int ticks = XPLMGetCycleNumber();

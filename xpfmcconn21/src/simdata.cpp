@@ -19,6 +19,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "simdata.h"
+#include "myassert.h"
 #include <math.h>
 #include <cstring>
 #include <fstream>
@@ -66,18 +67,23 @@ bool SimData<bool>::poll()
 template <>
 bool SimData<std::vector<float> >::poll()
 {
+    float values[1024];
+
+    MYASSERT(m_no_of_items < 1024);
+
     if(m_readWrite == RWType::WriteOnly) return false;
-    float* values = new float(m_no_of_items);
+
     XPLMGetDatavf(this->m_pDataRef,values,0,m_no_of_items);
 
-    return updateValue(std::vector<float>(values,values + sizeof(values)/sizeof(float)));
+    return updateValue(std::vector<float>(values,values + m_no_of_items));
 }
 
 template <>
 bool SimData<std::vector<int> >::poll()
 {
     if(m_readWrite == RWType::WriteOnly) return false;
-    int* values = new int(m_no_of_items);
+    MYASSERT(m_no_of_items < 1024);
+    int values[1024];
     XPLMGetDatavi(this->m_pDataRef,values,0,m_no_of_items);
     return updateValue(std::vector<int>(values, values + sizeof(values)/sizeof(int)));
 }
@@ -335,7 +341,8 @@ void SimData<std::vector<float> >::setValue(std::vector<float> data)
     if(m_readWrite == RWType::ReadOnly) {
         return;
     }
-    float* values = new float(m_no_of_items);
+    MYASSERT(m_no_of_items < 1024);
+    float values[1024];
     for (uint i=0 ; i < m_no_of_items ; i++)
         values[i] = data[i];
     XPLMSetDatavf(this->m_pDataRef,values,0,m_no_of_items);
@@ -346,7 +353,8 @@ void SimData<std::vector<int> >::setValue(std::vector<int> data)
     if(m_readWrite == RWType::ReadOnly) {
         return;
     }
-    int* values = new int(m_no_of_items);
+    MYASSERT(m_no_of_items < 1024);
+    int values[1024];
     for (uint i = 0 ; i < m_no_of_items ; i++)
         values[i]=data[i];
     XPLMSetDatavi(this->m_pDataRef,values,0,m_no_of_items);

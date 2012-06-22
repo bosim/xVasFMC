@@ -45,7 +45,8 @@ std::string getStdStringFomCan(can_t can)
     MYASSERT(can.msg.aero.dataType == FP_ACHAR5);
     uint length = can.dlc - 4;
     MYASSERT(length>0);
-    char* cstr = new char(length+1);
+    MYASSERT(length<1024);
+    char cstr[1024];
     for ( uint i = 0 ; i < length && i < 4; i++)
         cstr[i] = can.msg.aero.data.aChar[i];
     if ( length == 5 )
