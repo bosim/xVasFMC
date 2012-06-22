@@ -165,7 +165,7 @@ void registerInternalHandlersDataRefs()
         m_logfile << "standard autopilot handler setup success" << std::endl;
         intData.addDataRef(APSTATE, RWType::ReadOnly, "Autoilot State handled by standard handler",
                            "plugins/org/vasproject/xpfmcconn/autopilot/autopilot_state",PrioType::Middle,1);
-        floatData.addDataRef(APVS, RWType::ReadWrite, "Autopilot Vertical Speed Selected",
+        floatData.addDataRef(APVS, RWType::ReadOnly, "Autopilot Vertical Speed Selected",
                              "plugins/org/vasproject/xpfmcconn/autopilot/vertical_velocity",PrioType::Middle,50);
         floatData.addDataRef(APHDG,RWType::ReadWrite,"AP HDG",
                              "plugins/org/vasproject/xpfmcconn/autopilot/heading",PrioType::Middle,0.5);
@@ -207,7 +207,7 @@ PLUGIN_API void XPluginReceiveMessage(XPLMPluginID, long inMessage, void* inPara
                 floatvectorData.addDataRef(ENGFF,RWType::ReadOnly,"Array containing ENG FF","sim/flightmodel/engine/ENGN_FF_",PrioType::Middle,1/360,3600, 0, number_of_engines);
                 floatvectorData.addDataRef(TAI,RWType::ReadOnly,"ENG Anti-ice on per engine","sim/cockpit/switches/anti_ice_engine_air",PrioType::Constant,0.5, 1, 0, number_of_engines);
                 floatvectorData.addDataRef(ENGREV,RWType::ReadOnly,"Thrust reversers","sim/flightmodel2/engines/thrust_reverser_deploy_ratio",PrioType::Constant,0.1,100,0,number_of_engines);
-                floatvectorData.addDataRef(ENGTHRO,RWType::ReadWrite,"Throttle lever percent","sim/flightmodel/engine/ENGN_thro",PrioType::Middle,0.01,100,0,number_of_engines);
+                floatvectorData.addDataRef(ENGTHRO,RWType::ReadOnly,"Throttle lever percent","sim/flightmodel/engine/ENGN_thro",PrioType::Middle,0.01,100,0,number_of_engines);
                 floatvectorData.addDataRef(FLAPDETPOS,RWType::ReadOnly,"Positions of the flap lever detents", "sim/aircraft/controls/acf_flap_dn",PrioType::Constant,0.1,1,0,number_of_flapnotches);
                 if (!m_handlersRegistered)
                 {
@@ -252,8 +252,8 @@ PLUGIN_API int XPluginStart(char *outName, char *outSig, char *outDesc)
     doubleData.addDataRef(LAT,RWType::ReadOnly,"Latitude","sim/flightmodel/position/latitude",PrioType::High,0.0001);
     doubleData.addDataRef(LON,RWType::ReadOnly,"Longitude","sim/flightmodel/position/longitude",PrioType::High,0.0001);
     doubleData.addDataRef(TALT,RWType::ReadOnly,"True Alt","sim/flightmodel/position/elevation",PrioType::High,1, Navcalc::METER_TO_FEET);
-    intData.addDataRef(ZDATE,RWType::ReadWrite,"Date in days since Jan 1st", "sim/time/local_date_days", PrioType::Constant,1);
-    floatData.addDataRef(ZTIME,RWType::ReadWrite,"UTC Time","sim/time/zulu_time_sec",PrioType::Middle,1);
+    intData.addDataRef(ZDATE,RWType::ReadOnly,"Date in days since Jan 1st", "sim/time/local_date_days", PrioType::Constant,1);
+    floatData.addDataRef(ZTIME,RWType::ReadOnly,"UTC Time","sim/time/zulu_time_sec",PrioType::Middle,1);
     floatData.addDataRef(V_S0,RWType::ReadOnly,"VS0, stall speed full flaps","sim/aircraft/view/acf_Vso",PrioType::Constant);
     floatData.addDataRef(V_S,RWType::ReadOnly,"VS, stall speed clean","sim/aircraft/view/acf_Vs",PrioType::Constant);
     floatData.addDataRef(V_NO,RWType::ReadOnly,"Vno, normal operating speed","sim/aircraft/view/acf_Vno",PrioType::Constant);
@@ -278,11 +278,11 @@ PLUGIN_API int XPluginStart(char *outName, char *outSig, char *outDesc)
     floatData.addDataRef(OAT,RWType::ReadOnly,"OAT in degC","sim/weather/temperature_ambient_c",PrioType::Low,1);
     floatData.addDataRef(DEW,RWType::ReadOnly,"dewpoint in degC","sim/weather/dewpoi_sealevel_c",PrioType::Low,1);
     floatData.addDataRef(TAT,RWType::ReadOnly,"TAT in degC","sim/weather/temperature_le_c",PrioType::Low,1);
-    //floatData.addDataRef(APHDG,RWType::ReadWrite,"AP HDG","sim/cockpit/autopilot/heading_mag",PrioType::Middle,2^(-1));
-    floatData.addDataRef(APALT,RWType::ReadWrite,"AP ALT","sim/cockpit/autopilot/altitude",PrioType::Middle,1);
-    floatData.addDataRef(APSPD,RWType::ReadWrite,"AP SPD","sim/cockpit/autopilot/airspeed",PrioType::Middle,0.009);
-    floatData.addDataRef(ALTSET,RWType::ReadWrite,"pilots altimeter setting","sim/cockpit/misc/barometer_setting",PrioType::Low,0.009,(1/Navcalc::HPA_TO_INHG));
-    //floatData.addDataRef(APVS,RWType::ReadWrite,"AP VS","sim/cockpit/autopilot/vertical_velocity",PrioType::Middle,99);
+    //floatData.addDataRef(APHDG,RWType::ReadWrite, "AP HDG","sim/cockpit/autopilot/nav_steer_deg_mag",PrioType::High,0.0001);
+    floatData.addDataRef(APALT,RWType::ReadOnly,"AP ALT","sim/cockpit/autopilot/altitude",PrioType::Middle,1);
+    floatData.addDataRef(APSPD,RWType::ReadOnly,"AP SPD","sim/cockpit/autopilot/airspeed",PrioType::Middle,0.009);
+    floatData.addDataRef(ALTSET,RWType::ReadOnly,"pilots altimeter setting","sim/cockpit/misc/barometer_setting",PrioType::Low,0.009,(1/Navcalc::HPA_TO_INHG));
+    //floatData.addDataRef(APVS,RWType::ReadOnly,"AP VS","sim/cockpit/autopilot/vertical_velocity",PrioType::Middle,99);
     floatData.addDataRef(ADF1BRG,RWType::ReadOnly,"ADF1 bearing","sim/cockpit/radios/adf1_dir_degt",PrioType::Middle);
     floatData.addDataRef(ADF2BRG,RWType::ReadOnly,"ADF2 bearing","sim/cockpit/radios/adf2_dir_degt",PrioType::Middle);
     floatData.addDataRef(N1DME,RWType::ReadOnly,"DME NAV 1","sim/cockpit/radios/nav1_dme_dist_m",PrioType::Middle);
@@ -290,22 +290,23 @@ PLUGIN_API int XPluginStart(char *outName, char *outSig, char *outDesc)
     floatData.addDataRef(VOR1HDEF,RWType::ReadOnly,"NAV1 VOR-pointer deflection percent","sim/cockpit/radios/nav1_hdef_dot",PrioType::Middle,0.01,62);
     floatData.addDataRef(VOR2HDEF,RWType::ReadOnly,"NAV2 VOR-pointer deflection percent","sim/cockpit/radios/nav2_hdef_dot",PrioType::Middle,0.01,62);
     floatData.addDataRef(ILS1VDEF,RWType::ReadOnly,"NAV1  GS-pointer deflection percent","sim/cockpit/radios/nav1_vdef_dot",PrioType::Middle,0.01,62);
-    boolData.addDataRef(APSPDMACH, RWType::ReadWrite,"AP C/O SPD MACH","sim/cockpit/autopilot/airspeed_is_mach",PrioType::Low);
-    intData.addDataRef(EFIS1SELCPT, RWType::ReadWrite,"EFIS 1 Select Switch Cpt", "sim/cockpit2/EFIS/EFIS_1_selection_pilot",PrioType::Middle,1);
-    intData.addDataRef(EFIS2SELCPT, RWType::ReadWrite,"EFIS 2 Select Switch Cpt", "sim/cockpit2/EFIS/EFIS_2_selection_pilot",PrioType::Middle,1);
-    intData.addDataRef(FDON,RWType::ReadWrite,"FD","sim/cockpit/autopilot/autopilot_mode",PrioType::Low,0.9);
-    intData.addDataRef(NAV1,RWType::ReadWrite,"NAV 1","sim/cockpit/radios/nav1_freq_hz",PrioType::Low,1,10);
-    intData.addDataRef(NAV2,RWType::ReadWrite,"NAV 2","sim/cockpit/radios/nav2_freq_hz",PrioType::Low,1,10);
-    intData.addDataRef(ADF1,RWType::ReadWrite,"ADF 1","sim/cockpit/radios/adf1_freq_hz",PrioType::Low,1,1000);
-    intData.addDataRef(ADF2,RWType::ReadWrite,"ADF 2","sim/cockpit/radios/adf2_freq_hz",PrioType::Low,1,1000);
+    boolData.addDataRef(APSPDMACH, RWType::ReadOnly,"AP C/O SPD MACH","sim/cockpit/autopilot/airspeed_is_mach",PrioType::Low);
+    intData.addDataRef(EFIS1SELCPT, RWType::ReadOnly,"EFIS 1 Select Switch Cpt", "sim/cockpit2/EFIS/EFIS_1_selection_pilot",PrioType::Middle,1);
+    intData.addDataRef(EFIS2SELCPT, RWType::ReadOnly,"EFIS 2 Select Switch Cpt", "sim/cockpit2/EFIS/EFIS_2_selection_pilot",PrioType::Middle,1);
+    intData.addDataRef(FDON,RWType::ReadOnly,"FD","sim/cockpit/autopilot/autopilot_mode",PrioType::Low,0.9);
+    intData.addDataRef(NAV1,RWType::ReadOnly,"NAV 1","sim/cockpit/radios/nav1_freq_hz",PrioType::Low,1,10);
+    intData.addDataRef(NAV2,RWType::ReadOnly,"NAV 2","sim/cockpit/radios/nav2_freq_hz",PrioType::Low,1,10);
+    intData.addDataRef(ADF1,RWType::ReadOnly,"ADF 1","sim/cockpit/radios/adf1_freq_hz",PrioType::Low,1,1000);
+    intData.addDataRef(ADF2,RWType::ReadOnly,"ADF 2","sim/cockpit/radios/adf2_freq_hz",PrioType::Low,1,1000);
     //intvectorData.addDataRef(NAVMODE,RWType::ReadOnly, "NAV Type", "sim/cockpit/radios/nav_type", PrioType::Middle);
     intData.addDataRef(N1FROMTO,RWType::ReadOnly,"Nav 1 from/to","sim/cockpit/radios/nav1_fromto",PrioType::Low);
     intData.addDataRef(N2FROMTO,RWType::ReadOnly,"Nav 2 from/to","sim/cockpit/radios/nav2_fromto",PrioType::Low);
     boolData.addDataRef(N1HASDME,RWType::ReadOnly,"Nav1 has dme","sim/cockpit/radios/nav1_has_dme",PrioType::Low);
     boolData.addDataRef(N2HASDME,RWType::ReadOnly,"Nav2 has dme","sim/cockpit/radios/nav2_has_dme",PrioType::Low);
-    //intData.addDataRef(APMODE,RWType::ReadWrite,"AP state","sim/cockpit/autopilot/autopilot_state",PrioType::Low,0.9);
-    floatData.addDataRef(OBS1,RWType::ReadWrite,"OBS 1 in mag deg","sim/cockpit/radios/nav1_obs_degm",PrioType::Low);
-    floatData.addDataRef(OBS2,RWType::ReadWrite,"OBS 2 in mag deg","sim/cockpit/radios/nav2_obs_degm",PrioType::Low);
+    boolData.addDataRef(NAVOVR,RWType::ReadOnly,"Nav2 has dme","sim/operation/override/override_nav_heading",PrioType::Low);
+    //intData.addDataRef(APMODE,RWType::ReadOnly,"AP state","sim/cockpit/autopilot/autopilot_state",PrioType::Low,0.9);
+    floatData.addDataRef(OBS1,RWType::ReadOnly,"OBS 1 in mag deg","sim/cockpit/radios/nav1_obs_degm",PrioType::Low);
+    floatData.addDataRef(OBS2,RWType::ReadOnly,"OBS 2 in mag deg","sim/cockpit/radios/nav2_obs_degm",PrioType::Low);
     floatData.addDataRef(FDROLL,RWType::ReadOnly,"FD roll","sim/cockpit/autopilot/flight_director_roll",PrioType::High,-1);
     floatData.addDataRef(FDPITCH,RWType::ReadOnly,"FD pitch","sim/cockpit/autopilot/flight_director_pitch",PrioType::High,-1);
     floatData.addDataRef(TOTWT,RWType::ReadOnly,"Total weight kg","sim/flightmodel/weight/m_total",PrioType::Constant);
@@ -317,7 +318,7 @@ PLUGIN_API int XPluginStart(char *outName, char *outSig, char *outDesc)
     floatvectorData.addDataRef(ENGFF,RWType::ReadOnly,"Array containing ENG FF","sim/flightmodel/engine/ENGN_FF_",PrioType::Middle,1/360,3600);
     floatvectorData.addDataRef(TAI,RWType::ReadOnly,"ENG Anti-ice on per engine","sim/cockpit/switches/anti_ice_engine_air",PrioType::Constant,0.5);
     floatvectorData.addDataRef(ENGREV,RWType::ReadOnly,"Thrust reversers","sim/flightmodel2/engines/thrust_reverser_deploy_ratio",PrioType::Constant,0.1,100);
-    floatvectorData.addDataRef(ENGTHRO,RWType::ReadWrite,"Throttle lever percent","sim/flightmodel/engine/ENGN_thro",PrioType::Middle,0.01,100);
+    floatvectorData.addDataRef(ENGTHRO,RWType::ReadOnly,"Throttle lever percent","sim/flightmodel/engine/ENGN_thro",PrioType::Middle,0.01,100);
 
     intData.addDataRef(NOENGINES,RWType::ReadOnly,"No of engines","sim/aircraft/engine/acf_num_engines",PrioType::Constant);
     boolData.addDataRef(AVIONICS,RWType::ReadOnly,"Avionics Power","sim/cockpit/electrical/avionics_on",PrioType::Constant);
@@ -333,9 +334,9 @@ PLUGIN_API int XPluginStart(char *outName, char *outSig, char *outDesc)
     floatData.addDataRef(PRKBRK,RWType::ReadOnly,"Park brake deployment","sim/flightmodel/controls/parkbrake",PrioType::Constant,0.1);
     floatvectorData.addDataRef(GEAR,RWType::ReadOnly,"Gear deployment ratio","sim/flightmodel2/gear/deploy_ratio",PrioType::Constant,0.1,100,0,3);
     floatData.addDataRef(FLAPS,RWType::ReadOnly,"FLAPS percent","sim/flightmodel/controls/flaprat",PrioType::Constant,0.09,100);
-    floatData.addDataRef(FLAPRQST,RWType::ReadWrite,"FLAP REQUEST percent","sim/flightmodel/controls/flaprqst",PrioType::Constant,0.09,100);
-    boolData.addDataRef(THROVRD,RWType::ReadWrite,"Override throttles?","sim/operation/override/override_throttles",PrioType::Low);
-    floatData.addDataRef(THROVRDPOS,RWType::ReadWrite,"Position of overriden Thr in sim","sim/flightmodel/engine/ENGN_thro_override",PrioType::Middle);
+    floatData.addDataRef(FLAPRQST,RWType::ReadOnly,"FLAP REQUEST percent","sim/flightmodel/controls/flaprqst",PrioType::Constant,0.09,100);
+    boolData.addDataRef(THROVRD,RWType::ReadOnly,"Override throttles?","sim/operation/override/override_throttles",PrioType::Low);
+    floatData.addDataRef(THROVRDPOS,RWType::ReadOnly,"Position of overriden Thr in sim","sim/flightmodel/engine/ENGN_thro_override",PrioType::Middle);
     intData.addDataRef(FLAPDET,RWType::ReadOnly,"Number on flap lever detents","sim/aircraft/controls/acf_flap_detents",PrioType::Constant);
     floatvectorData.addDataRef(FLAPDETPOS,RWType::ReadOnly,"Positions of the flap lever detents", "sim/aircraft/controls/acf_flap_dn",PrioType::Constant);
     floatData.addDataRef(SPDBRK,RWType::ReadOnly,"Position of speedbrake handle", "sim/cockpit2/controls/speedbrake_ratio",PrioType::Low,0.1);

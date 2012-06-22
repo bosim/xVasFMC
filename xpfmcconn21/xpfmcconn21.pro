@@ -62,7 +62,6 @@ HEADERS += \
     casprotocol.h \
     paketwriter.h \
     plugin_defines.h \
-    apxplaneb737stratmannv3.h \
     ../vaslib/src/fsaccess_xplane_refids.h \
     ../vaslib/src/canas.h
 
@@ -79,5 +78,4 @@ SOURCES += \
     navcalc.cpp \
     udpwritesocket.cpp \
     udpreadsocket.cpp \
-    casprotocol.cpp \
-    apxplaneb737stratmannv3.cpp
+    casprotocol.cpp

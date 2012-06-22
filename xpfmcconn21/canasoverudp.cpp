@@ -225,61 +225,17 @@ bool CanASOverUDP::processInput(DataContainer<int>& intData, DataContainer<float
         }
         switch( id )
             {
-            case ZTIME: f = getFloatFromCan(message); if(!floatData.setDataRefAtId(ZTIME,f)) m_logfile << "Failure to write UTC time to " << f << std::endl; break;
-            case ZDATE: i = getIntFromCan(message); if(!intData.setDataRefAtId(ZDATE,i-1)) m_logfile << "Failure to write date to " << i << std::endl; break;
-            case APHDG: f = getFloatFromCan(message); if(!floatData.setDataRefAtId(APHDG,f)) m_logfile << "Failure to write APHDG to" << f << std::endl; break;
-            case APALT: f = getFloatFromCan(message); if(!floatData.setDataRefAtId(APALT,f)) m_logfile << "Failure to write APALT to" << f << std::endl; break;
-            case APSPD: f = getFloatFromCan(message); if(!floatData.setDataRefAtId(APSPD,f)) m_logfile << "Failure to write APSPD to" << f << std::endl; break;
-            case APSPDMACH: b = getBoolFromCan(message); if(!boolData.setDataRefAtId(APSPDMACH,b)) m_logfile << "Failure to write APSPDMACH" << std::endl; break;
-            case APVS: f = getFloatFromCan(message); if(!floatData.setDataRefAtId(APVS,f)) m_logfile << "Failure to write APVS to " << f << std::endl; break;
-            case FDON: i = getIntFromCan(message); if(!intData.setDataRefAtId(FDON,i)) m_logfile << "Failure to write FDON" << std::endl; break;
-            case NAV1: i = getIntFromCan(message); if(!intData.setDataRefAtId(NAV1,i)) m_logfile << "Failure to write NAV1 to" << i << std::endl; break;
-            case NAV2: i = getIntFromCan(message); if(!intData.setDataRefAtId(NAV2,i)) m_logfile << "Failure to write NAV2 to" << i << std::endl; break;
-            case ADF1: i = getIntFromCan(message); if(!intData.setDataRefAtId(ADF1,i)) m_logfile << "Failure to write ADF1 to" << i << std::endl; break;
-            case ADF2: i = getIntFromCan(message); if(!intData.setDataRefAtId(ADF2,i)) m_logfile << "Failure to write ADF2 to" << i << std::endl; break;
-            case OBS1: f = getFloatFromCan(message); if(!floatData.setDataRefAtId(OBS1,f)) m_logfile << "Failure to write OBS1 to" << f << std::endl; break;
-            case OBS2: f = getFloatFromCan(message); if(!floatData.setDataRefAtId(OBS2,f)) m_logfile << "Failure to write OBS2 to" << f << std::endl; break;
-            case ALTSET:f = getFloatFromCan(message); if(!floatData.setDataRefAtId(ALTSET,f)) m_logfile << "Failure to write ALTSET to" << f << std::endl; break;
-            case FLAPRQST:f = getFloatFromCan(message);if(!floatData.setDataRefAtId(FLAPRQST,f)) m_logfile << "Failure to write FLAPRQST to" << f << std::endl; break;
-           /* case ENGTHRO: static floatvec engthro;
-                getFloatVectorFromCan(message, engthro);
-                for( uint k=0 ; k<engthro.size ; k++ )
-                {
-                    f = engthro.value[k];
-                    vf.push_back(f);
-                }
-                if (!floatvectorData.setDataRefAtId(ENGTHRO,vf)) printf("Failure to write ENGTHR to%f\n",vf[0]);
-                break;*/
-            case THROVRDPOS: f = getFloatFromCan(message); boolData.setDataRefAtId(THROVRD,true); if(!floatData.setDataRefAtId(THROVRDPOS,f)) printf("Failure to write THROVRDPOS to%f\n",f); break;
-            case APSTATE: i = getIntFromCan(message);
-                if (apHandler != 0) {
-                    int msg = 0;
-                    switch (i) {
-                                            case 0x4:   msg = XPAPIFACE_COMM_HDG_HOLD_ON;    /*printf("HDG ON\n");*/    break;
-                                            case ~0x4:  msg = XPAPIFACE_COMM_HDG_HOLD_OFF;   /*printf("HDG OFF\n");*/   break;
-                                            case 0x8:   msg = XPAPIFACE_COMM_ALT_HOLD_ON;    /*printf("ALT ON\n");*/    break;
-                                            case ~0x8:  msg = XPAPIFACE_COMM_ALT_HOLD_OFF;   /*printf("ALT OFF\n");*/   break;
-                                            case 0xF :  msg = XPAPIFACE_COMM_SPEED_HOLD_ON;  /*printf("SPD ON\n");*/    break;
-                                            case ~0xF:  msg = XPAPIFACE_COMM_SPEED_HOLD_OFF; /*printf("SPD OFF\n");*/   break;
-                                            case 0x20:  msg = XPAPIFACE_COMM_MACH_HOLD_ON;   /*printf("MACH ON\n");*/   break;
-                                            case ~0x20: msg = XPAPIFACE_COMM_MACH_HOLD_OFF;  /*printf("MACH OFF\n");*/  break;
-                                            case 0x1000: msg = XPAPIFACE_COMM_AT_ARM_ON;     /*printf("AT ARM\n");*/    break;
-                                            case ~0x1000:msg = XPAPIFACE_COMM_AT_ARM_OFF;    /*printf("AT DISARM\n");*/ break;
-                                            case 0x80:  msg = XPAPIFACE_COMM_NAV1_HOLD_ON;   /*printf("NAV1 ON\n");*/   break;
-                                            case ~0x80: msg = XPAPIFACE_COMM_NAV1_HOLD_OFF;  /*printf("NAV1 OFF\n");*/  break;
-                                            case 0x200: msg = XPAPIFACE_COMM_APP_HOLD_ON;    /*printf("APP ON\n");*/    break;
-                                            case ~0x200:msg = XPAPIFACE_COMM_APP_HOLD_OFF;   /*printf("APP OFF\n");*/   break;
-                                            default : m_logfile << "Unknown autopilot command, don't know how to handle " << i  << std::endl; break;
-                                        }
-                    apHandler->processInput(msg);
-                } else {
-                    m_logfile << "ERROR in Autopilot communication, command discarded, unable!" << std::endl;
-                }
-                break;
-            case THROVRD: b = getBoolFromCan(message);if(!boolData.setDataRefAtId(THROVRD,b)) m_logfile << "Failure to write THROVRD" << std::endl; if(!b) floatData.setDataRefAtId(THROVRDPOS,-2.0f);break;
-            case PITCHOVRDPOS: f = getFloatFromCan(message); break;
-            default: m_logfile << "ERROR: Got unrecognized ID: of " << id << std::endl; return false;
+                case APHDG:
+                    f = getFloatFromCan(message);
+                    if(!floatData.setDataRefAtId(APHDG,f)) {
+                        m_logfile << "Failure to write APHDG to" << f << std::endl;
+                    } else {
+                        m_logfile << "Autopilot heading written"  << f << std::endl;
+                    }
+                    break;
+                default: m_logfile << "ERROR: Got unrecognized ID: of " << id << std::endl; return false;
             }
+
     }
     return true;
 }

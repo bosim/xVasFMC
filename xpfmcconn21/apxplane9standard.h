@@ -82,32 +82,7 @@ class APXPlane9Standard : public LogicHandler {
 
   private:
 
-    /**
-      * set bit in field
-      */
-    void i_set(int func);
-
-    /**
-      * unset bit in field
-      */
-    void i_unset(int func);
-
-    /**
-      * toggle bit in field
-      */
-    void i_tgl(int func);
-
-    bool i_isAct(int func);
-
-    void x_set(int func);
-
-    void x_unset(int func);
-
-    void x_tgl(int func);
-
-    bool x_isAct(int func);
-
-    SimData<int>* m_simAPState;
+     SimData<int>* m_simAPState;
 
     SimData<int>* m_simFDMode;
 
@@ -121,6 +96,8 @@ class APXPlane9Standard : public LogicHandler {
 
     SimData<float>* m_simAltWindow;
 
+    SimData<bool>* m_simnavOVR;
+
 
     /*SimData<float>* m_joyRollInput;
 
@@ -131,6 +108,7 @@ class APXPlane9Standard : public LogicHandler {
     OwnedData<float>* m_internalVVI;
 
     OwnedData<float>* m_internalHDG;
+
 
     float m_last_received_vs;
 

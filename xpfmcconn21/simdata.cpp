@@ -289,24 +289,40 @@ bool SimData<std::string>::updateValue(std::string data)
 template <>
 void SimData<double>::setValue(double data)
 {
+    if(m_readWrite == RWType::ReadOnly) {
+        return;
+    }
+
     XPLMSetDatad(this->m_pDataRef, data);
 }
 
 template <>
 void SimData<float>::setValue(float data)
 {
+    if(m_readWrite == RWType::ReadOnly) {
+        return;
+    }
+
     XPLMSetDataf(this->m_pDataRef, data);
 }
 
 template <>
 void SimData<int>::setValue(int data)
 {
+    if(m_readWrite == RWType::ReadOnly) {
+        return;
+    }
+
     XPLMSetDatai(this->m_pDataRef, data);
 }
 
 template <>
 void SimData<bool>::setValue(bool data)
 {
+    if(m_readWrite == RWType::ReadOnly) {
+        return;
+    }
+
     if(data)
         XPLMSetDatai(this->m_pDataRef, 1);
     else
@@ -316,6 +332,9 @@ void SimData<bool>::setValue(bool data)
 template <>
 void SimData<std::vector<float> >::setValue(std::vector<float> data)
 {
+    if(m_readWrite == RWType::ReadOnly) {
+        return;
+    }
     float* values = new float(m_no_of_items);
     for (uint i=0 ; i < m_no_of_items ; i++)
         values[i] = data[i];
@@ -324,6 +343,9 @@ void SimData<std::vector<float> >::setValue(std::vector<float> data)
 template <>
 void SimData<std::vector<int> >::setValue(std::vector<int> data)
 {
+    if(m_readWrite == RWType::ReadOnly) {
+        return;
+    }
     int* values = new int(m_no_of_items);
     for (uint i = 0 ; i < m_no_of_items ; i++)
         values[i]=data[i];
@@ -333,6 +355,9 @@ void SimData<std::vector<int> >::setValue(std::vector<int> data)
 template<>
 void SimData<std::string>::setValue(std::string data)
 {
+    if(m_readWrite == RWType::ReadOnly) {
+        return;
+    }
     int n = data.size()+1;
     char* cstr = new char(n);
     strcpy (cstr, data.c_str());
