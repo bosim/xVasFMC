@@ -62,7 +62,14 @@ local.properties
 *.vspscc
 .builds
 *.dotCover
+
+# Binary stuff
 *.lib
+*.exe
+
+# QT stuff
+Makefile*
+ui_*.h
 
 ## TODO: If you have NuGet Package Restore enabled, uncomment this
 #packages/
