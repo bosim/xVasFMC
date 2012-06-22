@@ -303,7 +303,6 @@ PLUGIN_API int XPluginStart(char *outName, char *outSig, char *outDesc)
     intData.addDataRef(N2FROMTO,RWType::ReadOnly,"Nav 2 from/to","sim/cockpit/radios/nav2_fromto",PrioType::Low);
     boolData.addDataRef(N1HASDME,RWType::ReadOnly,"Nav1 has dme","sim/cockpit/radios/nav1_has_dme",PrioType::Low);
     boolData.addDataRef(N2HASDME,RWType::ReadOnly,"Nav2 has dme","sim/cockpit/radios/nav2_has_dme",PrioType::Low);
-    boolData.addDataRef(NAVOVR,RWType::ReadOnly,"Nav2 has dme","sim/operation/override/override_nav_heading",PrioType::Low);
     //intData.addDataRef(APMODE,RWType::ReadOnly,"AP state","sim/cockpit/autopilot/autopilot_state",PrioType::Low,0.9);
     floatData.addDataRef(OBS1,RWType::ReadOnly,"OBS 1 in mag deg","sim/cockpit/radios/nav1_obs_degm",PrioType::Low);
     floatData.addDataRef(OBS2,RWType::ReadOnly,"OBS 2 in mag deg","sim/cockpit/radios/nav2_obs_degm",PrioType::Low);

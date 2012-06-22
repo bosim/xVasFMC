@@ -11,13 +11,13 @@ VERSION = 2.1.0
 INCLUDEPATH += ./include/simpleini
 INCLUDEPATH += ./include/udp
 INCLUDEPATH += ./include/XPLM
-INCLUDEPATH += ../vaslib/src
+INCLUDEPATH += ../../vaslib/src
 
 
 win32 { 
     TARGET = xpfmcconn/win.xpl
     DEFINES += APL=0 IBM=1 LIN=0 WIN_32
-    LIBS += -L../xpfmcconn21/lib/ -lXPLM -lwsock32
+    LIBS += -Llib -lXPLM -lwsock32
 }
 
 unix:!macx { 
