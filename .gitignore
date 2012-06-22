@@ -70,6 +70,7 @@ local.properties
 # QT stuff
 Makefile*
 ui_*.h
+*.res
 
 ## TODO: If you have NuGet Package Restore enabled, uncomment this
 #packages/
