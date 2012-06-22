@@ -24,6 +24,8 @@
 #include <cstring>
 #include <fstream>
 
+#define BUF_SIZE 1024
+
 extern std::fstream m_logfile;
 
 template <>
@@ -67,9 +69,9 @@ bool SimData<bool>::poll()
 template <>
 bool SimData<std::vector<float> >::poll()
 {
-    float values[1024];
+    float values[BUF_SIZE];
 
-    MYASSERT(m_no_of_items < 1024);
+    MYASSERT(m_no_of_items < BUF_SIZE);
 
     if(m_readWrite == RWType::WriteOnly) return false;
 
@@ -82,8 +84,8 @@ template <>
 bool SimData<std::vector<int> >::poll()
 {
     if(m_readWrite == RWType::WriteOnly) return false;
-    MYASSERT(m_no_of_items < 1024);
-    int values[1024];
+    MYASSERT(m_no_of_items < BUF_SIZE);
+    int values[BUF_SIZE];
     XPLMGetDatavi(this->m_pDataRef,values,0,m_no_of_items);
     return updateValue(std::vector<int>(values, values + sizeof(values)/sizeof(int)));
 }
@@ -341,8 +343,8 @@ void SimData<std::vector<float> >::setValue(std::vector<float> data)
     if(m_readWrite == RWType::ReadOnly) {
         return;
     }
-    MYASSERT(m_no_of_items < 1024);
-    float values[1024];
+    MYASSERT(m_no_of_items < BUF_SIZE);
+    float values[BUF_SIZE];
     for (uint i=0 ; i < m_no_of_items ; i++)
         values[i] = data[i];
     XPLMSetDatavf(this->m_pDataRef,values,0,m_no_of_items);
@@ -353,8 +355,8 @@ void SimData<std::vector<int> >::setValue(std::vector<int> data)
     if(m_readWrite == RWType::ReadOnly) {
         return;
     }
-    MYASSERT(m_no_of_items < 1024);
-    int values[1024];
+    MYASSERT(m_no_of_items < BUF_SIZE);
+    int values[BUF_SIZE];
     for (uint i = 0 ; i < m_no_of_items ; i++)
         values[i]=data[i];
     XPLMSetDatavi(this->m_pDataRef,values,0,m_no_of_items);
