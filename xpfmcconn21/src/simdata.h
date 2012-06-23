@@ -239,7 +239,7 @@ bool SimData<T>::set(T data)
     if(m_readWrite == RWType::WriteOnly) return false;
     m_hasChanged = true;
     if (m_scale != 1)
-        setValue((data-m_offset)/m_scale);
+        setValue(static_cast<float>((data-m_offset)/m_scale));
     else
         setValue(data);
     return m_hasChanged;
@@ -331,7 +331,7 @@ T SimData<T>::data()
     }
     if (m_scale == 1 && m_offset == 0)
         return this->m_data;
-    return this->m_data * m_scale + m_offset;
+    return static_cast<float>(this->m_data * m_scale + m_offset);
 }
 template <>
 int SimData<int>::data();

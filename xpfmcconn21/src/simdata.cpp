@@ -93,9 +93,10 @@ bool SimData<std::vector<int> >::poll()
 template <>
 bool SimData<std::string>::poll()
 {
+    char outString[BUF_SIZE];
     if(m_readWrite == RWType::WriteOnly) return false;
     long n = XPLMGetDatab(this->m_pDataRef,NULL,0,0);
-    char* outString = new char(n);
+    MYASSERT(n < BUF_SIZE);
     XPLMGetDatab(this->m_pDataRef, outString, 0, n);
     return updateValue(std::string(outString));
 }
@@ -138,7 +139,7 @@ bool SimData<std::vector<float> >::set(std::vector<float> data)
     if (m_scale != 1) {
         for( uint i=0 ; i<data.size() ; i++ )
         {
-            data[i] = (data[i]-m_offset)/m_scale;
+            data[i] = static_cast<float>((data[i]-m_offset)/m_scale);
         }
     }
     setValue(data);
@@ -369,7 +370,8 @@ void SimData<std::string>::setValue(std::string data)
         return;
     }
     int n = data.size()+1;
-    char* cstr = new char(n);
+    MYASSERT(n < BUF_SIZE);
+    char cstr[BUF_SIZE];
     strcpy (cstr, data.c_str());
     XPLMSetDatab(this->m_pDataRef, cstr , 0, n);
 }
@@ -394,7 +396,7 @@ std::vector<float> SimData<std::vector<float> >::data()
     std::vector<float> returnvector;
     returnvector.resize(m_data.size());
     for (uint i=0 ; i<m_data.size() ; i++)
-        returnvector[i]=m_data[i]*m_scale + m_offset;
+        returnvector[i]=static_cast<float>(m_data[i]*m_scale + m_offset);
     return std::vector<float>(returnvector.begin(),returnvector.end());
 
 }

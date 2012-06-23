@@ -3,7 +3,8 @@ TEMPLATE = lib
 # Shared library without any Qt functionality
 QT -= gui core
 
-CONFIG += warn_on release shared
+#CONFIG += warn_on release shared
+CONFIG += warn_on debug shared
 CONFIG -= rtti exceptions thread qt
 
 VERSION = 2.1.0
@@ -16,7 +17,7 @@ INCLUDEPATH += ../../vaslib/src
 
 win32 { 
     TARGET = xpfmcconn/win.xpl
-    DEFINES += APL=0 IBM=1 LIN=0 WIN_32
+    DEFINES += APL=0 IBM=1 LIN=0 WIN_32 _CRT_SECURE_NO_WARNINGS
     LIBS += -Llib -lXPLM -lwsock32
 }
 
@@ -51,7 +52,6 @@ HEADERS += \
     rwtype.h \
     radionav.h \
     apxplane9standard.h \
-    fbwjoystickinterface.h \
     xpapiface_msg.h \
     myassert.h \
     navcalc.h \
@@ -72,7 +72,6 @@ SOURCES += \
     simdata.cpp \
     radionav.cpp \
     apxplane9standard.cpp \
-    fbwjoystickinterface.cpp \
     logichandler.cpp \
     myassert.cpp \
     navcalc.cpp \

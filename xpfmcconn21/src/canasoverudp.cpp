@@ -94,11 +94,15 @@ CanASOverUDP::CanASOverUDP(std::ostream& logfile):
 
 CanASOverUDP::~CanASOverUDP()
 {
-    delete readSock;
-    readSock = 0;
-    delete writeSock;
-    writeSock = 0;
-
+    m_logfile << "Calling destructor of CanASOverUDP " << configured << m_enabled;
+    if(readSock) {
+        delete readSock;
+        readSock = 0;
+    }
+    if(writeSock) {
+        delete writeSock;
+        writeSock = 0;
+    }
 }
 
 bool CanASOverUDP::configure() {

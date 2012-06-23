@@ -50,19 +50,25 @@ UDPReadSocket::UDPReadSocket()
 
 UDPReadSocket::~UDPReadSocket()
 {
-	if ( m_multicastActive )
-	{
-#ifdef WIN_32
-        setsockopt(sockId, IPPROTO_IP, IP_DROP_MEMBERSHIP, (const char *)&multicast, sizeof(multicast));
-#else
-        setsockopt(sockId, IPPROTO_IP, IP_DROP_MEMBERSHIP, (const void *)&multicast, sizeof(multicast));
-#endif
-	}
+    if (sockId > 0) {
+        if ( m_multicastActive )
+        {
+            #ifdef WIN_32
+            setsockopt(sockId, IPPROTO_IP, IP_DROP_MEMBERSHIP, (const char *)&multicast, sizeof(multicast));
+            #else
+            setsockopt(sockId, IPPROTO_IP, IP_DROP_MEMBERSHIP, (const void *)&multicast, sizeof(multicast));
+            #endif
+        }
 
-    close(sockId);
-#ifdef WIN_32
-    WSACleanup();
-#endif
+        #ifdef WIN_32
+        closesocket(sockId);
+        WSACleanup();
+        #else
+        close(sockId);
+        #endif
+
+        sockId = -1;
+    }
 }
 
 void UDPReadSocket::configure(const std::string& host, int in_port)

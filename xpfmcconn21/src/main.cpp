@@ -17,7 +17,6 @@
 #include "logichandler.h"
 #include "radionav.h"
 #include "apxplane9standard.h"
-#include "fbwjoystickinterface.h"
 #include "owneddata.h"
 #include "simdata.h"
 

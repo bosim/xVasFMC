@@ -12,7 +12,7 @@ class UDPReadSocket
 {
 public:
     UDPReadSocket();
-    ~UDPReadSocket();
+    virtual ~UDPReadSocket();
     void configure(const std::string& host, int port);
     long read(void* data, size_t maxsize);
 private:

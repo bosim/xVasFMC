@@ -30,12 +30,17 @@ UDPWriteSocket::UDPWriteSocket()
 
 UDPWriteSocket::~UDPWriteSocket()
 {
-    delete[] destinationAddr;
-    // Close socket
-    close (sockId);
-#ifdef WIN_32
-    WSACleanup();
-#endif
+    if(sockId > 0) {
+        delete[] destinationAddr;
+        // Close socket
+        #ifdef WIN_32
+        closesocket(sockId);
+        WSACleanup();
+        #else
+        close (sockId);
+        #endif
+        sockId = -1;
+    }
 }
 
 void UDPWriteSocket::configure(const std::string& host, int port)
