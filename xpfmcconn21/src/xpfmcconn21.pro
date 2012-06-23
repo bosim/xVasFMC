@@ -63,7 +63,8 @@ HEADERS += \
     paketwriter.h \
     plugin_defines.h \
     ../vaslib/src/fsaccess_xplane_refids.h \
-    ../vaslib/src/canas.h
+    ../vaslib/src/canas.h \
+    infoserver.h
 
 SOURCES += \
     main.cpp \

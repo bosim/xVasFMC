@@ -225,7 +225,8 @@ HEADERS += \
     fmc_data_provider.h \
     bithandling.h \
     noise_generator.h \
-    declination_geomag.h
+    declination_geomag.h \
+    fsaccess_xplane_refids.h
 
 # Disable X-Plane access in gauge
 !gauge {

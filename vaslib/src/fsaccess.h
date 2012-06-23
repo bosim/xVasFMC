@@ -182,6 +182,7 @@ public:
 
     virtual bool setPushback(PushBack) { return false; }
 
+    virtual bool setReadFp() { return false; }
     virtual void writeFMCStatusToSim(const FMCStatusData&) {};
 
 protected:

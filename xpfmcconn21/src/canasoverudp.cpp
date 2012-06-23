@@ -5,6 +5,7 @@
 #include "fsaccess_xplane_refids.h"
 #include "xpapiface_msg.h"
 #include "XPLMProcessing.h"
+#include "infoserver.h"
 
 #include "plugin_defines.h"
 
@@ -151,6 +152,7 @@ bool CanASOverUDP::processInput(DataContainer<int>& intData, DataContainer<float
                            std::vector<LogicHandler*> Handlers,
                            int ticks, double secs)
 {
+
     static float last_sent_sts = 0;
     // check if we were connected to vasfmc in the last 15 seconds, if not, send a state transmission service request
     if (m_last_heared_from_vasfmc + 15.0f < secs && last_sent_sts + 15.0f < secs)
@@ -228,6 +230,7 @@ bool CanASOverUDP::processInput(DataContainer<int>& intData, DataContainer<float
                 continue;
             }
         }
+        InfoServer infoserver(m_logfile);
         switch( id )
             {
                 case APHDG:
@@ -237,6 +240,28 @@ bool CanASOverUDP::processInput(DataContainer<int>& intData, DataContainer<float
                     } else {
                         m_logfile << "Autopilot heading written"  << f << std::endl;
                     }
+                    break;
+                #if 0
+                case APVS:
+                    f = getFloatFromCan(message);
+                    if(!floatData.setDataRefAtId(APVS,f)) {
+                        m_logfile << "Failure to write APHDG to" << f << std::endl;
+                    } else {
+                        m_logfile << "Autopilot heading written"  << f << std::endl;
+                    }
+                    break;
+                #endif
+                case READFP:
+                    m_logfile << "I should read fp" << std::endl;
+                    try {
+                        string result = infoserver.getFlightPlan();
+                        infoserver.processFlightPlan(result);
+                    }
+                    catch(runtime_error e) {
+                        m_logfile << "Could not read fp" << e.what();
+                    }
+
+                    m_logfile << "Finish fetching FP" << std::endl;
                     break;
                 default: m_logfile << "ERROR: Got unrecognized ID: of " << id << std::endl; return false;
             }

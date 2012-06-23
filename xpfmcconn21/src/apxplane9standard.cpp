@@ -47,9 +47,7 @@ bool APXPlane9Standard::registerDataRefs()
     m_simVVI = new SimData<float>("sim/cockpit/autopilot/vertical_velocity","Autopilot VVI",RWType::ReadWrite);
     m_simBarAlt = new SimData<float>("sim/flightmodel/misc/h_ind","indicated barometric alt", RWType::ReadOnly);
     m_simAPSPDisMach = new SimData<bool>("sim/cockpit/autopilot/airspeed_is_mach","AP Spd shows mach",RWType::ReadWrite);
-    m_simHDG = new SimData<float>("sim/cockpit/autopilot/nav_steer_deg_mag","XP AP HDG",RWType::ReadWrite);
-    m_simnavOVR = new SimData<bool>("sim/operation/override/override_nav_heading", "NAV Override", RWType::ReadWrite);
-    // sim/cockpit/autopilot/heading_mag
+    m_simHDG = new SimData<float>("sim/cockpit/autopilot/heading_mag","XP AP HDG",RWType::ReadWrite);
     return true;
 }
 

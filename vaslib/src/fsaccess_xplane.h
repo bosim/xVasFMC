@@ -78,6 +78,7 @@ public:
     virtual bool setAPPArm(bool on);
 
     virtual bool setAltimeterHpa(const double& hpa);
+    virtual bool setReadFp();
 
 protected slots:
 

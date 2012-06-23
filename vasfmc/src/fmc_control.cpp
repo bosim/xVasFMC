@@ -970,6 +970,8 @@ void FMCControl::slotDataChanged(const QString& flag, bool direct_change, const 
             Logger::log(QString("FMCControl:slotDataChanged: could not save persistant route to (%1)").
                         arg(m_persistance_filename));
 
+    m_fs_access->setReadFp();
+
     //----- sync data to the remove FMCs if any
 
     if ((m_fmc_connect_master_tcp_server != 0 && getFMCConnectModeMasterNrClients() > 0) ||

@@ -497,6 +497,11 @@ bool FSAccessXPlane::setElevator(double percent)
     return sendValue(PITCHOVRDPOS, (float)percent);
 }
 
+bool FSAccessXPlane::setReadFp() {
+    if (!m_flightstatus->isValid()) return false;
+    return sendValue(READFP, 1);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 
 void FSAccessXPlane::slotSocketRead()
