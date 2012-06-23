@@ -163,8 +163,9 @@ class InfoServer {
                     ++i;
                 }
             }
-            XPLMSetDestinationFMSEntry(1);
-            XPLMSetDisplayedFMSEntry(1);
+            /* First waypoint in VASFMC route is _always_ previous waypoint */
+            XPLMSetDestinationFMSEntry(2);
+            XPLMSetDisplayedFMSEntry(2);
         }
 
     private:
