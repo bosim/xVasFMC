@@ -150,13 +150,18 @@ class InfoServer {
                     XPLMNavRef navaid = XPLMFindNavAid(NULL, waypoint.c_str(), &lat, &lon, NULL, xp_type);
 
                     if(navaid != XPLM_NAV_NOT_FOUND) {
-                        logfile << "Got NavAid " << waypoint << endl;
-                        logfile.flush();
-                        XPLMSetFMSEntryInfo(i, navaid, 0);
+                        char navaid_id[256];
+                        XPLMGetNavAidInfo(navaid, NULL, NULL, NULL, NULL, NULL, NULL, navaid_id, NULL, NULL);
+                        /* We cannot be sure that X-Plane finds the right waypoint, e.g. TRS27 is found instead
+                           of TRS near Stockholm */
+                        if(!strcmp(navaid_id, waypoint.c_str())) {
+                            XPLMSetFMSEntryInfo(i, navaid, 0);
+                        }
+                        else {
+                            XPLMSetFMSEntryLatLon(i, lat, lon, 0);
+                        }
                     }
                     else {
-                        logfile << "Did not get NavAid " << waypoint << endl;
-                        logfile.flush();
                         XPLMSetFMSEntryLatLon(i, lat, lon, 0);
                     }
 
