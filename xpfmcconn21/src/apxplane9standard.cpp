@@ -19,7 +19,6 @@ APXPlane9Standard::APXPlane9Standard(std::ostream& logfile):
         m_internalAPState(0),
         m_internalVVI(0),
         m_internalHDG(0),
-        m_simnavOVR(0),
         m_logfile(logfile)
 {}
 
@@ -32,7 +31,6 @@ APXPlane9Standard::~APXPlane9Standard()
     delete m_simBarAlt;
     delete m_simAPSPDisMach;
     delete m_simHDG;
-    delete m_simnavOVR;
 
     delete m_internalAPState;
     delete m_internalVVI;
@@ -87,7 +85,6 @@ bool APXPlane9Standard::processState()
         else
             heading = last_received_heading;
         m_simHDG->set(heading);
-        m_simnavOVR->set(true);
     } else
     {
         m_internalHDG->set(Navcalc::round(heading));

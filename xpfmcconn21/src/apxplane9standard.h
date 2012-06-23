@@ -96,8 +96,6 @@ class APXPlane9Standard : public LogicHandler {
 
     SimData<float>* m_simAltWindow;
 
-    SimData<bool>* m_simnavOVR;
-
 
     /*SimData<float>* m_joyRollInput;
 
