@@ -133,7 +133,7 @@ void UDPReadSocket::configure(const std::string& host, int in_port)
     //fcntl (sockId, F_SETFL, socketflags | O_NONBLOCK);
 }
 
-long UDPReadSocket::read(void* data, size_t maxsize)
+long UDPReadSocket::read(void* data, size_t maxsize, struct sockaddr_in& fromAddr, socklen_t& fromAddr_len)
 {
     fromAddr_len = sizeof (fromAddr);
     memset (&fromAddr, 0, fromAddr_len);

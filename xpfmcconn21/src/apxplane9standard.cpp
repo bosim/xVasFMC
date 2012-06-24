@@ -67,7 +67,6 @@ bool APXPlane9Standard::processState()
     m_simVVI->poll();
     m_simHDG->poll();
 
-
     float heading = m_simHDG->data();
     float last_received_heading = m_internalHDG->data();
     int xp_fd_mode = m_simFDMode->data();

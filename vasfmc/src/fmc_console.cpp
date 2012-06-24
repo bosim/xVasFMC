@@ -74,15 +74,6 @@ FMCConsole::FMCConsole(QWidget* parent, Qt::WFlags fl, const QString& style) :
 #if !VASFMC_GAUGE
     setupUi(this);
 
-    // setup splash
-
-    if (QFile::exists(SPLASHSCREEN_FILE))
-    {
-        QPixmap pixmap(SPLASHSCREEN_FILE);
-        m_splash = new QSplashScreen(pixmap);
-        m_splash->showMessage("Starting up ...", Qt::AlignTop | Qt::AlignRight);
-        m_splash->show();
-    }
 #else
     Q_UNUSED(parent);
     Q_UNUSED(fl);
@@ -451,8 +442,6 @@ void FMCConsole::unregisterConfigWidget(const QString& title)
 
 void FMCConsole::slotDeleteSplashscreen()
 {
-    delete m_splash;
-    m_splash = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////

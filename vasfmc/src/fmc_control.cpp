@@ -247,7 +247,7 @@ FMCControl::FMCControl(ConfigWidgetProvider* config_widget_provider,
         MYASSERT(m_iocp_server != 0);
     }
 
-    m_info_server = new InfoServer();
+    m_info_server = new InfoServer(m_main_config->getValue(CFG_VASFMC_DIR)+"/"+m_main_config->getValue(CFG_PERSISTANCE_FILE));
 
     // init noise
 

@@ -37,7 +37,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 
-#define CFG_TCP_PORT "50018"
+#define INFOSERVER_TCP_PORT 50019
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -48,13 +48,14 @@ class InfoServer : public QObject
     Q_OBJECT
 
     public:
-        InfoServer() {
+        InfoServer(QString const& persistence_filename) {
             // setup config
             m_tcp_server = new QTcpServer;
+            m_persistence_filename = persistence_filename;
             MYASSERT(m_tcp_server != 0);
             MYASSERT(connect(m_tcp_server, SIGNAL(newConnection()), this, SLOT(slotNewConnection())));
 
-            if (!m_tcp_server->listen(QHostAddress::Any, 50019))
+            if (!m_tcp_server->listen(QHostAddress::Any, INFOSERVER_TCP_PORT))
                 Logger::log(QString("InfoServer: could not open TCP server on port 50018"));
             else
                 Logger::log(QString("InfoServer: TCP server listening on port 50018"));
@@ -79,7 +80,7 @@ class InfoServer : public QObject
                 if(s.startsWith("GET /persistence.dat")) {
                     Logger::log(QString("InfoServer:slotNewConnection: sending file"));
                     char buf[256];
-                    fstream fh("C:\\Program Files (x86)\\vasfmc-2.0a9\\persistence.dat", ios::in);
+                    fstream fh(m_persistence_filename.toStdString(), ios::in);
 
                     while(!fh.eof()) {
                         fh.getline(buf, 256);
@@ -94,6 +95,7 @@ class InfoServer : public QObject
 
     private:
         QTcpServer* m_tcp_server;
+        QString m_persistence_filename;
 
         //! Hidden copy-constructor
         InfoServer(const InfoServer&);

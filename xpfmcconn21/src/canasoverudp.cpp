@@ -154,6 +154,12 @@ bool CanASOverUDP::processInput(DataContainer<int>& intData, DataContainer<float
 {
 
     static float last_sent_sts = 0;
+
+    struct sockaddr_in fromaddr;
+    socklen_t fromaddr_len;
+
+    InfoServer infoserver(m_logfile);
+
     // check if we were connected to vasfmc in the last 15 seconds, if not, send a state transmission service request
     if (m_last_heared_from_vasfmc + 15.0f < secs && last_sent_sts + 15.0f < secs)
     {
@@ -173,7 +179,7 @@ bool CanASOverUDP::processInput(DataContainer<int>& intData, DataContainer<float
         if ( (*it)->name() == "APXPlane9Standard")
             apHandler = *it;
     can_t message;
-    while ( readSock->read(&message, sizeof(message)) > 0)
+    while ( readSock->read(&message, sizeof(message), fromaddr, fromaddr_len) > 0)
     {
         // if we receive a message from vasfmc while being disabled, enabled all handlers and start sending again
         if (!m_enabled)
@@ -230,7 +236,7 @@ bool CanASOverUDP::processInput(DataContainer<int>& intData, DataContainer<float
                 continue;
             }
         }
-        InfoServer infoserver(m_logfile);
+
         switch( id )
             {
                 case APHDG:
@@ -254,7 +260,7 @@ bool CanASOverUDP::processInput(DataContainer<int>& intData, DataContainer<float
                 case READFP:
                     m_logfile << "I should read fp" << std::endl;
                     try {
-                        string result = infoserver.getFlightPlan();
+                        string result = infoserver.getFlightPlan(fromaddr);
                         infoserver.processFlightPlan(result);
                     }
                     catch(runtime_error e) {
