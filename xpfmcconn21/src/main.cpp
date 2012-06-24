@@ -51,8 +51,6 @@ static float readHighPrioSimDataCallback(float, float, int, void*)
 {
     if (!m_enabled) return 1;
 
-    m_logfile << "readHighPrioSimDataCallback called" << std::endl;
-
     doubleData.updateHighPrio();
     floatData.updateHighPrio();
 
@@ -136,10 +134,6 @@ void registerInternalHandlersDataRefs()
         {
             ap = true;
         }
-        if ( name == "FBWJoystickInterface" )
-        {
-            joystick = true;
-        }
         if ( name == "RadioNav" )
         {
             radio = true;
@@ -216,12 +210,11 @@ PLUGIN_API void XPluginReceiveMessage(XPLMPluginID, long inMessage, void* inPara
 
 
 PLUGIN_API int XPluginStart(char *outName, char *outSig, char *outDesc)
-{
-    //m_logfile = new QFile("xpfmcconn.txt");
+{    
     m_logfile.open(LOG_FILENAME, std::ios_base::trunc | std::ios_base::out);
-    //m_logfile->open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Unbuffered);
-    //m_logstream = new QTextStream(m_logfile);
+
     MYASSERT(m_logfile);
+
     m_logfile << "XPluginStart:" << std::endl;
 
     m_enabled = false;
@@ -327,8 +320,7 @@ PLUGIN_API int XPluginStart(char *outName, char *outSig, char *outDesc)
     floatData.addDataRef(SPDBRK,RWType::ReadOnly,"Position of speedbrake handle", "sim/cockpit2/controls/speedbrake_ratio",PrioType::Low,0.1);
 
     Handlers.push_back(new APXPlane9Standard(m_logfile));
-    /*Handlers.push_back(new RadioNav(m_logfile));
-    Handlers.push_back(new FBWJoystickInterface(m_logfile));*/
+    /* Handlers.push_back(new RadioNav(m_logfile)); */
 
     std::vector<LogicHandler*>::iterator it;
     for ( it = Handlers.begin() ; it < Handlers.end() ; it++)
@@ -371,13 +363,15 @@ PLUGIN_API void XPluginDisable(void)
     m_enabled = false;
 
     shutDown();
+    #ifdef WIN_32
     WSACleanup();
+    #endif
     m_logfile << "XPluginDisable: disabled" << std::endl;
 }
 
 PLUGIN_API int XPluginEnable(void)
 {
-    #ifdef WIN32
+    #ifdef WIN_32
     // Start the Winsocket API
     WSADATA wsa;
 

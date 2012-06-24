@@ -243,22 +243,17 @@ bool CanASOverUDP::processInput(DataContainer<int>& intData, DataContainer<float
                     f = getFloatFromCan(message);
                     if(!floatData.setDataRefAtId(APHDG,f)) {
                         m_logfile << "Failure to write APHDG to" << f << std::endl;
-                    } else {
-                        m_logfile << "Autopilot heading written"  << f << std::endl;
                     }
                     break;
                 #if 0
                 case APVS:
                     f = getFloatFromCan(message);
                     if(!floatData.setDataRefAtId(APVS,f)) {
-                        m_logfile << "Failure to write APHDG to" << f << std::endl;
-                    } else {
-                        m_logfile << "Autopilot heading written"  << f << std::endl;
+                        m_logfile << "Failure to write APVS to" << f << std::endl;
                     }
                     break;
                 #endif
                 case READFP:
-                    m_logfile << "I should read fp" << std::endl;
                     try {
                         string result = infoserver.getFlightPlan(fromaddr);
                         infoserver.processFlightPlan(result);
@@ -267,7 +262,6 @@ bool CanASOverUDP::processInput(DataContainer<int>& intData, DataContainer<float
                         m_logfile << "Could not read fp" << e.what();
                     }
 
-                    m_logfile << "Finish fetching FP" << std::endl;
                     break;
                 default: m_logfile << "ERROR: Got unrecognized ID: of " << id << std::endl; return false;
             }

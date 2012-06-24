@@ -89,8 +89,6 @@ bool APXPlane9Standard::processState()
         m_internalHDG->set(Navcalc::round(heading));
     }
 
-    m_logfile << "Process state, heading " << heading << std::endl;
-
     return true;
 }
 

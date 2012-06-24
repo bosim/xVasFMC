@@ -114,19 +114,12 @@ void UDPReadSocket::configure(const std::string& host, int in_port)
             m_multicastActive = true;
         }
     }
-
-    // Set the socket non blocking
-    // otherwise it qould stop X-Plane when no messages imminent
-    //int socketflags = fcntl (sockId, F_GETFL, 0);
-    //fcntl (sockId, F_SETFL, socketflags | O_NONBLOCK);
 }
 
 long UDPReadSocket::read(void* data, size_t maxsize, struct sockaddr_in& fromAddr, socklen_t& fromAddr_len)
 {
     fromAddr_len = sizeof (fromAddr);
     memset (&fromAddr, 0, fromAddr_len);
-    m_logfile << "UDPReadSocket::read called" << std::endl;
-    //memset (msg, 0, BUFF_LEN);
 
     if (ready_read(sockId) == 1) {
         long bytesReceived =
@@ -140,10 +133,8 @@ long UDPReadSocket::read(void* data, size_t maxsize, struct sockaddr_in& fromAdd
             m_logfile << "PERROR: recvfrom" << std::endl;
             exit (1);
         } else
-            m_logfile << "Recv" << bytesReceived << std::endl;
             return bytesReceived;
     } else {
-        m_logfile << "Recv" << 0 << std::endl;
         return 0;
     }
 }

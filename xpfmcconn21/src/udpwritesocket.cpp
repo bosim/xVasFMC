@@ -62,7 +62,6 @@ void UDPWriteSocket::configure(const std::string& host, int port)
 
 long UDPWriteSocket::write(const void* data, size_t size)
 {
-    m_logfile << "UDPReadSocket::write called" << std::endl;
     long bytes_written =
 #ifdef WIN_32
             sendto (sockId, (const char*)data, size, 0, (struct sockaddr *)&hostAddr, sizeof(hostAddr));
@@ -74,6 +73,6 @@ long UDPWriteSocket::write(const void* data, size_t size)
         m_logfile << "Sendto2 failed" << std::endl;
         exit (1);
     }
-    m_logfile << "Send" << bytes_written << std::endl;
+
     return bytes_written;
 }
