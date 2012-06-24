@@ -19,6 +19,15 @@ License
 vasfmc is distributed under GNU GPL version 2. See LICENSE.txt for details. Few files are
 not GPL, however redistribution has been granted. Please take notice of that when/if editing. 
 
+Known bugs / TODO
+=================
+* LNAV can cause reset of flights. This will be fixed very soon. Currently it is not possible to
+turn heading steering of, but will be fixed really soon.
+* VNAV handling is not yet implemented.
+* Fuel calculation is not present.
+* VASFMC console is still there, we will get rid of it.
+* Get rid of debug information.
+
 Author(s)
 =================
 

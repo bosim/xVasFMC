@@ -28,17 +28,6 @@ int ready_read(int sock)
 
 UDPReadSocket::UDPReadSocket()
 {
-#ifdef WIN32
-    // Start the Winsocket API
-    WSADATA wsa;
-
-    // Load Winsock 2.2
-    if ( WSAStartup (MAKEWORD(2, 2), &wsa) != 0 )
-    {
-        m_logfile << " WSAStartup failed" << std::endl;
-        exit (1);
-    }
-#endif
 
     // Create socket
     if ( (sockId = socket(PF_INET, SOCK_DGRAM, 0)) < 0 )
@@ -62,7 +51,6 @@ UDPReadSocket::~UDPReadSocket()
 
         #ifdef WIN_32
         closesocket(sockId);
-        WSACleanup();
         #else
         close(sockId);
         #endif

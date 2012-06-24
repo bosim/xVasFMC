@@ -371,11 +371,24 @@ PLUGIN_API void XPluginDisable(void)
     m_enabled = false;
 
     shutDown();
+    WSACleanup();
     m_logfile << "XPluginDisable: disabled" << std::endl;
 }
 
 PLUGIN_API int XPluginEnable(void)
 {
+    #ifdef WIN32
+    // Start the Winsocket API
+    WSADATA wsa;
+
+    // Load Winsock 2.2
+    if ( WSAStartup (MAKEWORD(2, 2), &wsa) != 0 )
+    {
+        m_logfile << " WSAStartup failed" << std::endl;
+        exit (1);
+    }
+    #endif
+
     m_logfile << "XPluginEnable" << std::endl;
     setup();
     m_enabled = true;

@@ -8,18 +8,6 @@ extern std::fstream m_logfile;
 
 UDPWriteSocket::UDPWriteSocket()
 {
-#ifdef WIN32
-    // Start the Winsocket API
-    WSADATA wsa;
-
-    // Load Winsock 2.2
-    if ( WSAStartup (MAKEWORD(2, 2), &wsa) != 0 )
-    {
-        m_logfile << "WSAStartup failed" << std::endl;
-        exit (1);
-    }
-#endif
-
     // Get a socket
     if ( (sockId = socket(PF_INET, SOCK_DGRAM, 0) ) < 0)
     {
@@ -34,8 +22,7 @@ UDPWriteSocket::~UDPWriteSocket()
         delete[] destinationAddr;
         // Close socket
         #ifdef WIN_32
-        closesocket(sockId);
-        WSACleanup();
+        closesocket(sockId);     
         #else
         close (sockId);
         #endif
