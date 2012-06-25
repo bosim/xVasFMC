@@ -71,6 +71,7 @@ local.properties
 Makefile*
 ui_*.h
 *.res
+*.rc
 
 ## TODO: If you have NuGet Package Restore enabled, uncomment this
 #packages/
