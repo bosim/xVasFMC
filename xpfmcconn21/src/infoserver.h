@@ -13,24 +13,8 @@ void SplitLine(string s, vector<string>& l, char delim = ' ') {
     string::size_type i = 0;
     string::size_type last = 0;
 
-    bool ignore = false;
-
     while(i < s.size()) {
-        if(s[i] == '"') {
-
-            if(!ignore) {
-                ignore = true;
-                last = i + 1;
-            }
-            else {
-                string new_str = s.substr(last, i-last);
-                l.push_back(new_str);
-                last = i + 2;
-                i += 2;
-                ignore = false;
-            }
-        }
-        else if(s[i] == delim && !ignore) {
+        if(s[i] == delim) {
             string new_str = s.substr(last, i - last);
             l.push_back(new_str);
             last = i+1;
@@ -55,18 +39,10 @@ class InfoServer {
 
             string str;
 
-            #ifdef WIN_32
-            WSADATA wsadata;
-            MYASSERT(WSAStartup(0x0202, &wsadata) == 0);
-            #endif
-
             struct sockaddr_in target;
             target.sin_family = AF_INET;
             target.sin_port = htons (50019); //Port to connect on
-            /*target.sin_addr.s_addr = fromaddr.sin_addr.s_addr; //Target IP*/
-            target.sin_addr.s_addr = inet_addr("127.0.0.1");
-            //m_logfile << "From addr is " << inet_ntoa(fromaddr.sin_addr) << std::endl;
-            //m_logfile.flush();
+            target.sin_addr.s_addr = fromaddr.sin_addr.s_addr;
 
             s = socket (AF_INET, SOCK_STREAM, IPPROTO_TCP); //Create socket
             if (s <= 0) {
@@ -91,16 +67,10 @@ class InfoServer {
                 closesocket(s);
             }
 
-            #if WIN_32
-            WSACleanup(); //Clean up Winsock
-            #endif
-
             return str;
        }
 
         void processFlightPlan(string input) {
-            logfile << "processFlightPlan called" << endl;
-            logfile.flush();
 
             std::vector<string> lines;
             int i;
