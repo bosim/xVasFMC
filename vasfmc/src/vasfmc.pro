@@ -275,3 +275,4 @@ else {
 FORMS += \
     ui/fmc_cdu.ui \
     ui/fmc_console.ui
+

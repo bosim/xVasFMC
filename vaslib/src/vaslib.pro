@@ -73,90 +73,6 @@ withfgfs {
 }
 
 
-# Files to be included for vascharts
-withvascharts {
-    CONFIG += commonxml
-    HEADERS += \
-        chartwidget.h \
-        ge.h \
-        ge_projection.h \
-        ge_list.h \
-        ge_layers.h \
-        ge_rect.h \
-        ge_label.h \
-        ge_vor.h \
-        ge_ndb.h \
-        ge_airport.h \
-        ge_intersection.h \
-        ge_route.h \
-        treebase.h \
-        treebase_xml.h \
-        treebase_xml_chart.h \
-        chartmodel.h \
-        chart.xml.defines.h \
-        chart.elem.root.h \
-        chart.elem.info.h \
-        chart.elem.projection.h \
-        chart.elem.navaids.h \
-        chart.elem.routes.h \
-        chart.elem.texts.h \
-        chart.elem.navaid.h \
-        chart.elem.route.h \
-        chart.elem.text.h \
-        chart.elem.vor.h \
-        chart.elem.ndb.h \
-        chart.elem.airport.h \
-        chart.elem.intersection.h \
-        chartinfodlgimpl.h \
-        waypointchoosedlgimpl.h \
-        anchor_latlon.h \
-        termination_callback.h \
-        routedlgimpl.h \
-        ge_textrect.h \
-        waypointchoosedlgimpl.h \
-        textelemdlgimpl.h
-
-    SOURCES += \
-        chartwidget.cpp \
-        ge.cpp \
-        ge_projection.cpp \
-        ge_list.cpp \
-        ge_layers.cpp \
-        ge_rect.cpp \
-        ge_label.cpp \
-        ge_vor.cpp \
-        ge_ndb.cpp \
-        ge_airport.cpp \
-        ge_intersection.cpp \
-        ge_route.cpp \
-        treebase.cpp \
-        treebase_xml.cpp \
-        treebase_xml_chart.cpp \
-        chartmodel.cpp \
-        chart.xml.defines.cpp \
-        chart.elem.root.cpp \
-        chart.elem.info.cpp \
-        chart.elem.projection.cpp \
-        chart.elem.navaids.cpp \
-        chart.elem.routes.cpp \
-        chart.elem.texts.cpp \
-        chart.elem.navaid.cpp \
-        chart.elem.route.cpp \
-        chart.elem.text.cpp \
-        chart.elem.vor.cpp \
-        chart.elem.ndb.cpp \
-        chart.elem.airport.cpp \
-        chart.elem.intersection.cpp \
-        chartinfodlgimpl.cpp \
-        routedlgimpl.cpp \
-        ge_textrect.cpp \
-        waypointchoosedlgimpl.cpp \
-        textelemdlgimpl.cpp
-
-    FORMS += chart.info.dlg.ui
-}
-
-
 # The files constituting vaslib itself
 HEADERS += \
     ptrlist.h \
@@ -297,7 +213,6 @@ FORMS = \
     waypointchoosedlg.ui \
     routedlg.ui \
     infodlg.ui \
-    chart.info.dlg.ui \
     latlonpointdlg.ui \
     pbdpointdlg.ui \
     textelemdlg.ui
