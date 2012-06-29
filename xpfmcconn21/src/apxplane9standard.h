@@ -4,6 +4,7 @@
 #include "logichandler.h"
 #include "owneddata.h"
 #include "simdata.h"
+#include "infoserver.h"
 
 template <typename T>
 inline const T &qMin(const T &a, const T &b) { if (a < b) return a; return b; }
@@ -107,6 +108,7 @@ class APXPlane9Standard : public LogicHandler {
 
     OwnedData<float>* m_internalHDG;
 
+    InfoServer infoserver;
 
     float m_last_received_vs;
 

@@ -5,8 +5,6 @@
 #include "fsaccess_xplane_refids.h"
 #include "xpapiface_msg.h"
 #include "XPLMProcessing.h"
-#include "infoserver.h"
-
 #include "plugin_defines.h"
 
 #ifdef WIN_32
@@ -14,6 +12,8 @@
 #else
 #include <netinet/in.h>
 #endif
+
+extern bool m_readfp;
 
 int32_t getIntFromCan(can_t can)
 {
@@ -158,8 +158,6 @@ bool CanASOverUDP::processInput(DataContainer<int>& intData, DataContainer<float
     struct sockaddr_in fromaddr;
     socklen_t fromaddr_len;
 
-    InfoServer infoserver(m_logfile);
-
     // check if we were connected to vasfmc in the last 15 seconds, if not, send a state transmission service request
     if (m_last_heared_from_vasfmc + 15.0f < secs && last_sent_sts + 15.0f < secs)
     {
@@ -254,16 +252,11 @@ bool CanASOverUDP::processInput(DataContainer<int>& intData, DataContainer<float
                     break;
                 #endif
                 case READFP:
-                    try {
-                        string result = infoserver.getFlightPlan(fromaddr);
-                        infoserver.processFlightPlan(result);
-                    }
-                    catch(runtime_error e) {
-                        m_logfile << "Could not read fp" << e.what();
-                    }
-
+                    m_readfp = true;
                     break;
-                default: m_logfile << "ERROR: Got unrecognized ID: of " << id << std::endl; return false;
+                default:
+                    m_logfile << "ERROR: Got unrecognized ID: of " << id << std::endl;
+                    break;
             }
 
     }

@@ -27,6 +27,7 @@ std::fstream m_logfile;
 
 bool m_enabled = false;
 bool m_handlersRegistered = false;
+bool m_readfp = false;
 
 static float returnTime;
 static const int maxDataItems = 30;
@@ -145,14 +146,14 @@ void registerInternalHandlersDataRefs()
         m_logfile << "standard autopilot handler setup success" << std::endl;
         intData.addDataRef(APSTATE, RWType::ReadOnly, "Autoilot State handled by standard handler",
                            "plugins/org/vasproject/xpfmcconn/autopilot/autopilot_state",PrioType::Middle,1);
-        floatData.addDataRef(APVS, RWType::ReadOnly, "Autopilot Vertical Speed Selected",
+        floatData.addDataRef(APVS, RWType::ReadWrite, "Autopilot Vertical Speed Selected",
                              "plugins/org/vasproject/xpfmcconn/autopilot/vertical_velocity",PrioType::Middle,50);
         floatData.addDataRef(APHDG,RWType::ReadWrite,"AP HDG",
                              "plugins/org/vasproject/xpfmcconn/autopilot/heading",PrioType::Middle,0.5);
     } else
     {
         m_logfile << "standard autopilot handler setup FAILED" << std::endl;
-        intData.removeAtId(APSTATE);
+        /*intData.removeAtId(APSTATE);*/
         floatData.removeAtId(APVS);
         floatData.removeAtId(APHDG);
     }

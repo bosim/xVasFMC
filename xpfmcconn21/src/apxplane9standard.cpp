@@ -1,11 +1,13 @@
-#include "apxplane9standard.h"
 #include "simdata.h"
 #include "owneddata.h"
 #include <XPLMDataAccess.h>
 #include <XPLMUtilities.h>
 #include "xpapiface_msg.h"
 #include "navcalc.h"
+#include "apxplane9standard.h"
 #include <math.h>
+
+extern bool m_readfp;
 
 APXPlane9Standard::APXPlane9Standard(std::ostream& logfile):
         LogicHandler(logfile),
@@ -39,7 +41,7 @@ APXPlane9Standard::~APXPlane9Standard()
 
 bool APXPlane9Standard::registerDataRefs()
 {
-    m_simAPState = new SimData<int>("sim/cockpit/autopilot/autopilot_state","Autopilot bitfield", RWType::ReadOnly);
+    m_simAPState = new SimData<int>("sim/cockpit/autopilot/autopilot_state","Autopilot bitfield", RWType::ReadWrite);
     m_simFDMode = new SimData<int>("sim/cockpit/autopilot/autopilot_mode", "FD : Off, On, Auto", RWType::ReadOnly);
     m_simAltWindow = new SimData<float>("sim/cockpit/autopilot/altitude","Autopilot Alt window", RWType::ReadOnly);
     m_simVVI = new SimData<float>("sim/cockpit/autopilot/vertical_velocity","Autopilot VVI",RWType::ReadWrite);
@@ -59,8 +61,7 @@ bool APXPlane9Standard::initState()
 
 bool APXPlane9Standard::processState()
 {
-    m_simAPState->poll();
-    m_simFDMode->poll();
+
     m_simAltWindow->poll();
     m_simBarAlt->poll();
     m_simAPSPDisMach->poll();
@@ -69,10 +70,13 @@ bool APXPlane9Standard::processState()
 
     float heading = m_simHDG->data();
     float last_received_heading = m_internalHDG->data();
-    int xp_fd_mode = m_simFDMode->data();
-    int xp_ap_state = m_simAPState->data();
+
     bool ap_spd_is_mach = m_simAPSPDisMach->data();
     float vs_request = m_internalVVI->data();
+
+    string result;
+    struct sockaddr_in fromaddr;
+    fromaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
     if ( fabs(last_received_heading-heading) > 1 && fabs(last_received_heading - heading) < 359)
     {
@@ -87,6 +91,24 @@ bool APXPlane9Standard::processState()
     } else
     {
         m_internalHDG->set(Navcalc::round(heading));
+    }
+
+    if(m_readfp) {
+        m_simAPState->poll();
+        m_simFDMode->poll();
+        int xp_fd_mode = m_simFDMode->data();
+        int xp_ap_state = m_simAPState->data();
+        m_simAPState->set(0);
+        m_simFDMode->set(0);
+        result = infoserver.getFlightPlan(fromaddr);
+        if(result.length() != 0) {
+          infoserver.processFlightPlan(result);
+        } else {
+           m_logfile << "WARNING: Got empty response, maybe we cannot connect to infoserver"  << std::endl;
+        }
+        m_simAPState->set(xp_ap_state);
+        m_simFDMode->set(xp_fd_mode);
+        m_readfp = false;
     }
 
     return true;
@@ -134,4 +156,5 @@ float APXPlane9Standard::processingFrequency()
 {
     return -7;
 }
+
 
