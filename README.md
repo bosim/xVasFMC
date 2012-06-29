@@ -6,13 +6,13 @@ of this project are:
 
 * A destilled version of VasFMC, with only the goal of working in X-Plane. 
 * Assisting more than overtaking control.
-* Only be a FMS nothing else.
+* Only be a CDU and nothing else.
 
 Compiling
 =================
 * Tested with Microsoft Visual Studio C++ 2010 Express and Qt SDK 1.2.1. Can be done
 by simply open the project files in Qt Creator and building, first vaslib, then vasfmc
-and then xpfmccoonn21.
+and then xpfmcconn21.
 
 License
 =================
@@ -21,8 +21,8 @@ not GPL, however redistribution has been granted. Please take notice of that whe
 
 Known bugs / TODO
 =================
-* LNAV can cause reset of flights. This will be fixed very soon. Currently it is not possible to
-turn heading steering of, but will be fixed really soon.
+* LNAV can cause flight reset (i.e. the plane is back at the runway). This will be fixed very soon. 
+* It is not possible to turn heading steering of, but will be fixed really soon.
 * VNAV handling is not yet implemented.
 * Fuel calculation is not present.
 * VASFMC console is still there, we will get rid of it.
@@ -31,7 +31,11 @@ turn heading steering of, but will be fixed really soon.
 Author(s)
 =================
 
-* Alex Wemmer and the VAS project team
+Past developers of VasFMC:
+
+* Alex Wemmer,
+* Philipp Münzel for the X-Plane plugin, 
+* the VAS project team.
 
 Current maintainer of the Code:
 
